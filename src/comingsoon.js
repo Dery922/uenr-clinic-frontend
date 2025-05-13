@@ -14,21 +14,18 @@ const HomePage = () => {
         <div className="home-content">
           <div className="home-logo">
             <a href="index-static.html">
-              <img src={logo} alt="Homepage" />
+          
             </a>
           </div>
 
           <div className="row home-content__main">
             <div className="col-eight home-content__text pull-right">
-              <h3>Welcome to Count</h3>
+              <h3>Welcome to Uenr Clinic</h3>
               <h1>
-                We are currently working <br />
-                on a new super awesome <br /> website.
+              We're opening soon to provide quality healthcare to the community.
               </h1>
               <p>
-                Nulla porttitor accumsan tincidunt. Nulla quis lorem ut libero
-                malesuada feugiat. Vivamus magna justo, lacinia eget consectetur
-                sed, convallis at tellus.
+              "At Uenr Clinic, we offer compassionate, affordable, and modern healthcare for families and individuals."
               </p>
 
               <div className="home-content__subscribe">
@@ -52,7 +49,7 @@ const HomePage = () => {
               <div className="home-content__clock">
                 <div className="top">
                   <div className="time days">
-                    325
+                   100
                     <span>Days</span>
                   </div>
                 </div>
@@ -81,9 +78,9 @@ const HomePage = () => {
           </ul>
 
           <div className="row home-copyright">
-            <span>Copyright Count 2018</span>
+            <span>Copyright Uenr Clinic</span>
             <span>
-              Design by <a href="https://www.styleshout.com/">styleshout</a>
+              Design by <a href="">We</a>
             </span>
           </div>
 
@@ -109,23 +106,23 @@ const HomePage = () => {
               <h3>Start A Conversation</h3>
               <p>
                 <a href="mailto:#0" className="info-email">
-                  mailus@ourwebsite.com
+                  uenr.edu.gh.com
                 </a>
                 <br />
                 <a href="tel:+18587338912" className="info-phone">
-                  +1.858.733.8912
+                  000 000 000
                 </a>
               </p>
             </div>
 
             <div className="info-block">
-              <h3>Visit Our Office</h3>
+              <h3>Uenr Clinic Ajacent Old Auditorium</h3>
               <p className="info-address">
-                1600 Amphitheatre Parkway
+              Uenr Clinic Ajacent Old Auditorium
                 <br />
-                Mountain View, CA
+                Bono , Sunyani
                 <br />
-                94043 US
+                Ghana
               </p>
             </div>
 
@@ -145,7 +142,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-
+{/* 
       <div id="preloader">
         <div id="loader">
           <div className="line-scale-pulse-out">
@@ -154,7 +151,7 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
