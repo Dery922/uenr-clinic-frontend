@@ -3,7 +3,7 @@ import "./css/base.css";
 import "./css/vendor.css";
 import "./css/main.css";
 import logo from "./images/logo.svg";
-import favicon from "./favicon.ico";
+
 
 const HomePage = () => {
   return (
