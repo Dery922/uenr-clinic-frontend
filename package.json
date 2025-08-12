@@ -5,27 +5,26 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@fortawesome/free-brands-svg-icons": "^7.0.0",
+    "@fortawesome/free-regular-svg-icons": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "@mui/material": "^7.3.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "@fortawesome/free-brands-svg-icons": "^7.0.0",
-    "@fortawesome/free-regular-svg-icons": "^7.0.0",
-    "@fortawesome/free-solid-svg-icons": "^7.0.0",
-    "@fortawesome/react-fontawesome": "^0.2.3",
-    "cookies": "^0.9.1",
-    "dotenv": "^16.5.0",
-    "yup": "^1.6.1",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.7",
     "chart.js": "^4.4.9",
+    "cookies": "^0.9.1",
     "cornerstone-core": "^2.6.1",
     "cornerstone-tools": "^6.0.10",
     "datatables.net": "^2.3.2",
     "datatables.net-buttons": "^3.2.3",
     "datatables.net-buttons-dt": "^3.2.3",
     "datatables.net-dt": "^2.3.2",
+    "dotenv": "^16.5.0",
     "formik": "^2.4.6",
     "fortawesome": "^0.0.1-security",
     "jquery": "^3.7.1",
@@ -37,7 +36,6 @@
     "react": "^19.1.0",
     "react-bootstrap": "^1.6.8",
     "react-bootstrap-icons": "^1.11.6",
-    "react-cornerstone-viewport": "^4.1.5",
     "react-data-table-component": "^7.7.0",
     "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
@@ -55,7 +53,8 @@
     "redux-thunk": "^3.1.0",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.8.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.6.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -68,7 +67,7 @@
       "react-app",
       "react-app/jest"
     ]
-  }, 
+  },
   "browserslist": {
     "production": [
       ">0.2%",
