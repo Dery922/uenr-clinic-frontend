@@ -19,6 +19,8 @@ $(document).ready(function() {
 		}]
 	};
 
+
+
 	var ctx = document.getElementById('bargraph').getContext('2d');
 	window.myBar = new Chart(ctx, {
 		type: 'bar',
@@ -29,7 +31,9 @@ $(document).ready(function() {
 				display: false,
 			}
 		}
-	});
+	})
+
+
 
 	// Line Chart
 

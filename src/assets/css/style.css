@@ -57,8 +57,10 @@ Version      : 1.0
 -----------------------*/
 
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,500,700');
-html {
+html, #root {
 	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 body {
 	font-family: 'Rubik', sans-serif;
@@ -67,6 +69,8 @@ body {
 	background-color: #fafafa;
 	overflow-x: hidden;
 	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 h1,
 h2,
@@ -107,6 +111,23 @@ a:focus {
 	color: #009ce7;
 	outline: none;
 }
+
+.form-control-custom{
+	display: block;
+    width: 50%;
+    height: calc(2.25rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
 .form-control {
 	border-radius: 0;
 	box-shadow: none;
@@ -888,6 +909,30 @@ textarea.form-control {
 	color: #009efb;
 	text-decoration: underline;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .mobile-user-menu {
 	color: #fff;
 	display: none;
@@ -1075,6 +1120,18 @@ textarea.form-control {
 	padding: 20px;
 	width: 400px;
 }
+
+.login-card {
+	position: relative;
+	max-width: 400px;
+	margin: auto;
+	padding: 2rem;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	min-height: 300px;
+  }
+
 .account-logo {
 	margin-bottom: 20px;
 	text-align: center;
@@ -1090,12 +1147,16 @@ textarea.form-control {
 	color: #009efb;
 }
 .account-box .form-control {
-	border: 1px solid #eaeaea;
-	border-radius: 0;
+	border: 3px solid #accce7;
+	border-radius: 10px;
 	box-shadow: inherit;
 	font-size: 14px;
 	height: 40px;
 }
+.account-box .input-error {
+	border : 3px solid red;
+}
+
 .account-box textarea.form-control {
 	height: 130px;
 }

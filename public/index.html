@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/img/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
@@ -15,6 +15,13 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/assets/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/assets/css/select2.min.css">
+    <link rel="stylesheet"  href="%PUBLIC_URL%/assets/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="%PUBLIC_URL%/assets/css/style.css" />
+ 
+ 
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -39,23 +46,39 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+      
   </body>
 
+  
+
+<!-- jQuery FIRST -->
 <script src="%PUBLIC_URL%/js/jquery-3.2.1.min.js"></script>
 
-<script src="%PUBLIC_URL%/js/bootstrap-datetimepicker.min.js"></script>
+<!-- Popper (needed for Bootstrap) -->
 <script src="%PUBLIC_URL%/js/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
 <script src="%PUBLIC_URL%/js/bootstrap.min.js"></script>
+
+<!-- Moment.js BEFORE datetimepicker -->
+<script src="%PUBLIC_URL%/js/moment.min.js"></script>
+
+<!-- Bootstrap datetimepicker -->
+<script src="%PUBLIC_URL%/js/bootstrap-datetimepicker.min.js"></script>
+
+<!-- Other plugins -->
 <script src="%PUBLIC_URL%/js/jquery.slimscroll.js"></script>
 <script src="%PUBLIC_URL%/js/select2.min.js"></script>
-<script src="%PUBLIC_URL%/js/Chart.bundle.js"></script>
-<script src="%PUBLIC_URL%/js/chart.js"></script>
+<!-- <script src="%PUBLIC_URL%/js/Chart.bundle.js"></script>
+<script src="%PUBLIC_URL%/js/chart.js"></script> -->
+<script src="%PUBLIC_URL%/js/jquery.dataTables.min.js"></script>
 <script src="%PUBLIC_URL%/js/dataTables.bootstrap4.min.js"></script>
 <script src="%PUBLIC_URL%/js/fullcalendar.min.js"></script>
-<script src="%PUBLIC_URL%/js/jquery.dataTables.min.js"></script>
 <script src="%PUBLIC_URL%/js/jquery.fullcalendar.js"></script>
-<script src="%PUBLIC_URL%/js/moment.min.js"></script>
 <script src="%PUBLIC_URL%/js/tagsinput.js"></script>
+
+<!-- Your custom script (optional) -->
 <script src="%PUBLIC_URL%/js/app.js"></script>
+
 
 </html>

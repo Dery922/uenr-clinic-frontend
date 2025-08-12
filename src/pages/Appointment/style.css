@@ -1,0 +1,43 @@
+/* Add to your stylesheet */
+.appointment-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: none;
+  }
+  
+  .appointment-card .card-body {
+    padding: 2rem;
+  }
+  
+  .form-label {
+    font-weight: 500;
+    color: #495057;
+  }
+  
+  .time-icon .react-datepicker-wrapper,
+  .cal-icon .react-datepicker-wrapper {
+    width: 100%;
+  }
+  
+  .invalid-feedback {
+    display: block;
+  }
+  
+  .btn-lg {
+    padding: 0.5rem 2rem;
+    font-size: 1.1rem;
+  }
+  
+  .page-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .page-header .breadcrumb {
+    background: transparent;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+  
+  .breadcrumb-item.active {
+    color: #6c757d;
+  }

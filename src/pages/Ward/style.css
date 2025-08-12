@@ -1,0 +1,25 @@
+.ward-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid #007bff;
+  }
+  .ward-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .progress {
+    height: 20px;
+  }
+  .badge-priority {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+  .nav-tabs .nav-link.active {
+    font-weight: 600;
+    border-bottom: 3px solid #007bff;
+  }
+  .patient-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
