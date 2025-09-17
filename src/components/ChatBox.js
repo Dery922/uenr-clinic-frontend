@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import socket from "../services/socketService"; // Import socket directly
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVideo,  } from "@fortawesome/free-solid-svg-icons";
+import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import VideoCall from "./VideoCall";
 
 const ChatWindow = ({
@@ -10,7 +10,6 @@ const ChatWindow = ({
   messages,
   currentUserId,
   onSendMessage,
-
 }) => {
   const [messageText, setMessageText] = useState("");
   const bottomRef = useRef(null);
@@ -18,6 +17,7 @@ const ChatWindow = ({
   const [activeCall, setActiveCall] = useState(null);
   const [incomingCall, setIncomingCall] = useState(null);
   const currentUser = useSelector((state) => state.user.user);
+  console.log(currentUser);
 
   useEffect(() => {
     const handleIncomingCall = ({ callId, callerId }) => {
@@ -138,58 +138,63 @@ const ChatWindow = ({
 
   return (
     <div className="chat-window">
-        {selectedUser && !activeCall && (
-  <button onClick={startVideoCall} className="video-call-btn">
-    <FontAwesomeIcon icon={faVideo} /> Video Call
-  </button>
-)}
-
-{incomingCall && (
-  <div className="incoming-call-modal">
-    <div className="modal-content">
-      <h3>Incoming Video Call</h3>
-      <p>{selectedUser.username} is calling...</p>
-      <div className="call-buttons">
-        <button onClick={acceptCall} className="accept-btn">
-          Accept
+      {selectedUser && !activeCall && (
+        <button onClick={startVideoCall} className="video-call-btn">
+          <FontAwesomeIcon icon={faVideo} /> Video Call
         </button>
-        <button onClick={rejectCall} className="reject-btn">
-          Reject
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-// Add active call display
-{activeCall && (
-  <VideoCall
-    callId={activeCall.callId}
-    otherUser={activeCall.otherUser}
-    onEndCall={endActiveCall}
-    isInitiator={activeCall.isInitiator}
-  />
-)}
+      )}
+      {incomingCall && (
+        <div className="incoming-call-modal">
+          <div className="modal-content">
+            <h3>Incoming Video Call</h3>
+            <p>{selectedUser.username} is calling...</p>
+            <div className="call-buttons">
+              <button onClick={acceptCall} className="accept-btn">
+                Accept
+              </button>
+              <button onClick={rejectCall} className="reject-btn">
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      // Add active call display
+      {activeCall && (
+        <VideoCall
+          callId={activeCall.callId}
+          otherUser={activeCall.otherUser}
+          onEndCall={endActiveCall}
+          isInitiator={activeCall.isInitiator}
+        />
+      )}
       {selectedUser ? (
         <>
-          <div className="fixed-header">
-            <div className="navbar">
-              <div className="user-details mr-auto">
-                <div className="float-left user-img m-r-10">
-                  <a href="profile.html" title={selectedUser.username}>
+          <div class="fixed-header">
+            <div class="navbar">
+              <div class="user-details mr-auto">
+                <div class="float-left user-img m-r-10">
+                  <a href="profile.html" title="Jennifer Robinson">
                     <img
-                      src="assets/img/user.jpg"
+                      src={
+                        selectedUser?.profile_picture ||
+                        "assets/img/patient-thumb-02.jpg"
+                      }
+                      onError={(e) => {
+                        e.target.src = "assets/img/patient-thumb-02.jpg";
+                      }}
                       alt=""
-                      className="w-40 rounded-circle"
+                      class="w-40 rounded-circle"
                     />
-                    <span className="status online"></span>
+                    <span class="status online"></span>
                   </a>
                 </div>
-                <div className="user-info float-left">
+                <div class="user-info float-left">
                   <a href="profile.html">
-                    <span className="font-bold">{selectedUser.username}</span>
+                    <span class="font-bold">{selectedUser.username}</span>{" "}
                   </a>
-                  <span className="last-seen">
+                  <span class="last-seen">
+                    {" "}
                     {selectedUser.lastSeen || "Last seen recently"}
                   </span>
                 </div>
@@ -210,17 +215,11 @@ const ChatWindow = ({
                     <i class="fa fa-phone"></i>
                   </a>
                 </li>
-                   {/* Your existing chat UI */}
-      {/* {selectedUser && !activeCall && (
-        <div className="chat-controls">
-          <button 
-            onClick={startVideoCall}
-            className="video-call-btn"
-          >
-            <i className="fa fa-video-camera"></i> Video Call
-          </button>
-        </div>
-      )} */}
+                <li class="nav-item">
+                  <a class="nav-link" href="video-call.html">
+                    <i class="fa fa-video-camera"></i>
+                  </a>
+                </li>
                 <li class="nav-item dropdown dropdown-action">
                   <a
                     href="#"
@@ -230,14 +229,6 @@ const ChatWindow = ({
                   >
                     <i class="fa fa-cog"></i>
                   </a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="javascript:void(0)">
-                      Delete Conversations
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)">
-                      Settings
-                    </a>
-                  </div>
                 </li>
               </ul>
             </div>
@@ -321,7 +312,6 @@ const ChatWindow = ({
           Select a user to start chatting
         </div>
       )}
-
       <div id="drag_files" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">

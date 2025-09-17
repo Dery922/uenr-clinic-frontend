@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 const Administrator = () => {
   return (
     <div className="main-wrapper">
+      <Sidebar />
       <div className="page-wrapper">
         <div className="content">
           <div className="row">
@@ -23,7 +24,7 @@ const Administrator = () => {
                         Last login: Today, 09:42 AM
                       </p>
                     </div> */}
-                     <Sidebar />
+                   
                     {/* <ul className="nav flex-column">
                       <li className="nav-item">
                         <a className="nav-link active" href="#">
@@ -96,13 +97,13 @@ const Administrator = () => {
                           type="button"
                           className="btn btn-sm btn-outline-secondary"
                         >
-                          <i className="fas fa-download mr-1"></i> Export
+                          <i className="fa fa-download mr-1"></i> Export
                         </button>
                         <button
                           type="button"
                           className="btn btn-sm btn-outline-secondary"
                         >
-                          <i className="fas fa-print mr-1"></i> Print
+                          <i className="fa fa-print mr-1"></i> Print
                         </button>
                       </div>
                       <div className="dropdown">
@@ -111,7 +112,7 @@ const Administrator = () => {
                           type="button"
                           data-toggle="dropdown"
                         >
-                          <i className="fas fa-calendar mr-1"></i> This Week
+                          <i className="fa fa-calendar mr-1"></i> This Week
                         </button>
                         <div className="dropdown-menu">
                           <a className="dropdown-item" href="#">
@@ -132,7 +133,7 @@ const Administrator = () => {
                   </div>
 
                   {/* Stats Cards */}
-                  <div className="row mb-4">
+                  {/* <div className="row mb-4">
                     <div className="col-md-3">
                       <div className="card text-white bg-primary mb-3">
                         <div className="card-body">
@@ -205,7 +206,7 @@ const Administrator = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="row">
                     {/* Recent Activity */}
@@ -225,7 +226,7 @@ const Administrator = () => {
                             >
                               <div className="d-flex w-100 justify-content-between">
                                 <div>
-                                  <i className="fas fa-user-plus text-success mr-2"></i>
+                                  <i className="fa fa-user-plus text-success mr-2"></i>
                                   <strong>New patient</strong> registered: Sarah
                                   Johnson
                                 </div>
@@ -240,7 +241,7 @@ const Administrator = () => {
                             >
                               <div className="d-flex w-100 justify-content-between">
                                 <div>
-                                  <i className="fas fa-prescription text-primary mr-2"></i>
+                                  <i className="fa fa-prescription text-primary mr-2"></i>
                                   <strong>Prescription</strong> approved for
                                   Michael Brown
                                 </div>
@@ -255,7 +256,7 @@ const Administrator = () => {
                             >
                               <div className="d-flex w-100 justify-content-between">
                                 <div>
-                                  <i className="fas fa-vial text-info mr-2"></i>
+                                  <i className="fa fa-vial text-info mr-2"></i>
                                   <strong>Lab results</strong> uploaded for
                                   patient #10042
                                 </div>
@@ -268,7 +269,7 @@ const Administrator = () => {
                             >
                               <div className="d-flex w-100 justify-content-between">
                                 <div>
-                                  <i className="fas fa-credit-card text-warning mr-2"></i>
+                                  <i className="fa fa-credit-card text-warning mr-2"></i>
                                   <strong>Payment</strong> received from John
                                   Smith ($85.00)
                                 </div>
@@ -283,7 +284,7 @@ const Administrator = () => {
                             >
                               <div className="d-flex w-100 justify-content-between">
                                 <div>
-                                  <i className="fas fa-calendar-times text-danger mr-2"></i>
+                                  <i className="fa fa-calendar-times text-danger mr-2"></i>
                                   <strong>Appointment</strong> canceled by
                                   Robert Wilson
                                 </div>
@@ -308,7 +309,7 @@ const Administrator = () => {
                             <div className="col-md-6 mb-3">
                               <Link to="/add-patient-record">
                               <button className="btn btn-outline-primary btn-block py-3">
-                                <i className="fas fa-user-plus fa-2x mb-2"></i>
+                                <i className="fa fa-user-plus fa-2x mb-2"></i>
                                 <br />
                                 Add New Patient
                               </button>
@@ -317,7 +318,7 @@ const Administrator = () => {
                             <div className="col-md-6 mb-3">
                               <Link to="/add/appointment">
                               <button className="btn btn-outline-success btn-block py-3">
-                                <i className="fas fa-calendar-plus fa-2x mb-2"></i>
+                                <i className="fa fa-calendar-plus fa-2x mb-2"></i>
                                 <br />
                                 Schedule Appointment
                               </button>
@@ -325,14 +326,14 @@ const Administrator = () => {
                             </div>
                             <div className="col-md-6 mb-3">
                               <button className="btn btn-outline-info btn-block py-3">
-                                <i className="fas fa-file-invoice-dollar fa-2x mb-2"></i>
+                                <i className="fa fa-file-invoice-dollar fa-2x mb-2"></i>
                                 <br />
                                 Generate Invoice
                               </button>
                             </div>
                             <div className="col-md-6 mb-3">
                               <Link to="/admin-view-report" className="btn btn-outline-warning btn-block py-3">
-                                <i className="fas fa-chart-pie fa-2x mb-2"></i>
+                                <i className="fa fa-chart-pie fa-2x mb-2"></i>
                                 <br />
                                 View Reports
                               </Link>
@@ -377,7 +378,7 @@ const Administrator = () => {
                               </td>
                               <td>
                                 <button className="btn btn-sm btn-outline-primary">
-                                  <i className="fas fa-eye"></i>
+                                  <i className="fa fa-eye"></i>
                                 </button>
                               </td>
                             </tr>
@@ -393,7 +394,7 @@ const Administrator = () => {
                               </td>
                               <td>
                                 <button className="btn btn-sm btn-outline-primary">
-                                  <i className="fas fa-eye"></i>
+                                  <i className="fa fa-eye"></i>
                                 </button>
                               </td>
                             </tr>
@@ -409,7 +410,7 @@ const Administrator = () => {
                               </td>
                               <td>
                                 <button className="btn btn-sm btn-outline-primary">
-                                  <i className="fas fa-eye"></i>
+                                  <i className="fa fa-eye"></i>
                                 </button>
                               </td>
                             </tr>
@@ -425,7 +426,7 @@ const Administrator = () => {
                               </td>
                               <td>
                                 <button className="btn btn-sm btn-outline-primary">
-                                  <i className="fas fa-eye"></i>
+                                  <i className="fa fa-eye"></i>
                                 </button>
                               </td>
                             </tr>
@@ -441,7 +442,7 @@ const Administrator = () => {
                               </td>
                               <td>
                                 <button className="btn btn-sm btn-outline-primary">
-                                  <i className="fas fa-eye"></i>
+                                  <i className="fa fa-eye"></i>
                                 </button>
                               </td>
                             </tr>
@@ -452,7 +453,7 @@ const Administrator = () => {
                   </div>
 
                   {/* System Alerts */}
-                  <div className="card">
+                  {/* <div className="card">
                     <div className="card-header bg-white d-flex justify-content-between align-items-center">
                       <h5 className="mb-0">System Alerts</h5>
                       <button className="btn btn-sm btn-outline-secondary">
@@ -493,7 +494,7 @@ const Administrator = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </main>
               </div>
             </div>

@@ -2,22 +2,95 @@ import { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import patientService from "../../services/patientService";
 import patientPrescription from "../../services/patientPrescription";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Pharmacy = () => {
   const [pat, setPat] = useState([]);
+  const [pendingData, setPendingData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const loggedInUser = useSelector((state) => state.user.user.username);
+
+  console.log(pendingData, "pending data dispense")
+
+
+//  const [formData, setFormData] = useState();
+
+        const [saving, setSaving] = useState(false);
+        const [saved, setSaved] = useState(false)
+
+  const savePrescriptionInfo = async (formData) => {
+      try {
+        
+        setSaving(true)
+        const res = await axios.post(
+          "http://localhost:8080/save-prescription-info",formData
+          
+        );
+        toast.success("Data save successfully!");
+      
+        setSaved(true);
+      } catch (error) {
+        console.log(error)
+      }finally{
+        setSaving(false)
+      }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await patientPrescription();
+        const response = await axios.get(
+          "http://localhost:8080/pharmacy/pending/prescription"
+        );
+        setPendingData(response.data);
+        console.log("dispense data coming", response.data);
         setPat(res);
-        console.log(pat);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
+
+  const handleDispense = async (planId, pharmacist_username, drugIndex) => {
+    console.log("all that is clearn", planId, pharmacist_username, drugIndex);
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
+
+      const response = await axios.patch(
+        `http://localhost:8080/pharmacy/dispense/${planId}`,
+        {
+          pharmacist_username,
+          drugIndex,
+        }
+      );
+
+      toast.success(response.data.message);
+      return response.data.plan;
+    } catch (err) {
+      console.log("error checking here", err);
+      toast.info(
+        err.response?.data?.error || "Failed to dispense medications check!"
+      );
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const viewDetails = (plan) => {
+    console.log("Viewing details for:", plan);
+    // You can open a modal, redirect to a details page, or display more info here
+  };
+
   return (
     <div className="main-wrapper">
       <Sidebar />
@@ -102,6 +175,7 @@ const Pharmacy = () => {
                               <th scope="col">Medications</th>
                               <th scope="col">Tests</th>
                               <th scope="col">Date</th>
+                              <th scope="col">Dr</th>
                               <th scope="col">Status</th>
                               <th scope="col">Actions</th>
                             </tr>
@@ -110,8 +184,8 @@ const Pharmacy = () => {
                             {pat &&
                               pat.map((data, index) => (
                                 <tr key={`patient-${index}`}>
-                                  <td>{data.patient_id}</td>
-                                  <td>{data.patient_name}</td>
+                                  <td>{data.patient}</td>
+                                  <td>{data.patient}</td>
 
                                   {/* Medications - properly handling array */}
                                   <td>
@@ -151,7 +225,16 @@ const Pharmacy = () => {
                                     )}
                                   </td>
 
-                                  <td>{data.registration_date}</td>
+                                  <td>
+                                    {new Date(
+                                      data.registration_date
+                                    ).toLocaleDateString("en-GB", {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    })}
+                                  </td>
+                                  <td>{data.username}</td>
                                   <td>
                                     <span
                                       className={`badge ${
@@ -166,7 +249,10 @@ const Pharmacy = () => {
                                     </span>
                                   </td>
                                   <td>
-                                    <Link to={`/pharmacy/prescription/${data.patient_id}`}  className="btn btn-sm btn-outline-primary mr-1">
+                                    <Link
+                                      to={`/pharmacy/prescription/${data.patient}`}
+                                      className="btn btn-sm btn-outline-primary mr-1"
+                                    >
                                       <i className="fa fa-eye"></i>View
                                     </Link>
                                     <button className="btn btn-sm btn-outline-success">
@@ -212,114 +298,186 @@ const Pharmacy = () => {
                     </div>
                   </div>
 
-                  {/* Medication Inventory */}
-                  {/* <div className="card">
-                    <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                      <h5 className="mb-0">Medication Inventory</h5>
-                      <button className="btn btn-sm btn-outline-primary">
-                        <i className="fas fa-sync-alt mr-1"></i> Refresh
-                      </button>
+                  <div className="card mb-4">
+                    <div className="card-header bg-white">
+                      <h5 className="mb-0">Dispension of Medications</h5>
                     </div>
                     <div className="card-body p-0">
                       <div className="table-responsive">
                         <table className="table table-hover mb-0">
                           <thead className="thead-light">
                             <tr>
-                              <th scope="col">Medication</th>
-                              <th scope="col">Dosage</th>
-                              <th scope="col">Stock</th>
-                              <th scope="col">Last Restock</th>
-                              <th scope="col">Price</th>
-                              <th scope="col">Actions</th>
+                              <th>Patient Name</th>
+                              <th>Medications</th>
+                              <th>Insurance Covered</th>
+                              <th>Payment Status</th>
+                              <th>Tests</th>
+                              <th>Dispense Medication</th>
+                              <th>Date</th>
+                              <th>Doctor</th>
+                              <th>Overall Status</th>
+                              <th>Actions</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>Amoxicillin</td>
-                              <td>500mg Capsule</td>
-                              <td>
-                                <div
-                                  className="progress"
-                                  style={{ height: "5px" }}
-                                >
-                                  <div
-                                    className="progress-bar bg-success"
-                                    role="progressbar"
-                                    style={{ width: "75%" }}
-                                  ></div>
-                                </div>
-                                <small>142 in stock</small>
-                              </td>
-                              <td>2023-05-10</td>
-                              <td>$12.99</td>
-                              <td>
-                                <button className="btn btn-sm btn-outline-primary mr-1">
-                                  <i className="fas fa-edit"></i>
-                                </button>
-                                <button className="btn btn-sm btn-outline-secondary">
-                                  <i className="fas fa-chart-line"></i>
-                                </button>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Lisinopril</td>
-                              <td>10mg Tablet</td>
-                              <td>
-                                <div
-                                  className="progress"
-                                  style={{ height: "5px" }}
-                                >
-                                  <div
-                                    className="progress-bar bg-warning"
-                                    role="progressbar"
-                                    style={{ width: "35%" }}
-                                  ></div>
-                                </div>
-                                <small>67 in stock</small>
-                              </td>
-                              <td>2023-05-12</td>
-                              <td>$8.50</td>
-                              <td>
-                                <button className="btn btn-sm btn-outline-primary mr-1">
-                                  <i className="fas fa-edit"></i>
-                                </button>
-                                <button className="btn btn-sm btn-outline-secondary">
-                                  <i className="fas fa-chart-line"></i>
-                                </button>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Atorvastatin</td>
-                              <td>20mg Tablet</td>
-                              <td>
-                                <div
-                                  className="progress"
-                                  style={{ height: "5px" }}
-                                >
-                                  <div
-                                    className="progress-bar bg-danger"
-                                    role="progressbar"
-                                    style={{ width: "15%" }}
-                                  ></div>
-                                </div>
-                                <small>23 in stock</small>
-                              </td>
-                              <td>2023-04-28</td>
-                              <td>$15.75</td>
-                              <td>
-                                <button className="btn btn-sm btn-outline-primary mr-1">
-                                  <i className="fas fa-edit"></i>
-                                </button>
-                                <button className="btn btn-sm btn-outline-secondary">
-                                  <i className="fas fa-chart-line"></i>
-                                </button>
-                              </td>
-                            </tr>
+                            {(pendingData || []).length > 0 ? (
+                              pendingData.map((plan) => (
+                                <tr key={plan._id}>
+                                  {/* Patient Name */}
+                                  <td>{plan.patient || "N/A"}</td>
+
+                                  {/* Medications */}
+                                  <td>
+                                    {(plan.medications || []).length > 0 ? (
+                                      plan.medications.map((drug, index) => (
+                                        <div key={index}>
+                                          {drug.medication_name} ({drug.dose},{" "}
+                                          {drug.frequency})
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <span>No Medications</span>
+                                    )}
+                                  </td>
+
+                                  {/* Insurance Covered */}
+                                  <td>
+                                    {(plan.medications || []).length > 0 ? (
+                                      plan.medications.map((med, i) => (
+                                        <div key={i}>
+                                          {med.covered_by_insurance
+                                            ? "Yes"
+                                            : `No (₵${med.amount})`}
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <span>No Data</span>
+                                    )}
+                                  </td>
+
+                                  {/* payment status */}
+                                  <td>
+                                    {(plan.medications || []).length > 0 ? (
+                                      plan.medications.map((med, i) => (
+                                        <div key={i}>
+                                          {med.covered_by_insurance
+                                            ? "Not applicable"
+                                            : `${med.payment_status}`}
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <span>No Data</span>
+                                    )}
+                                  </td>
+
+                                  {/* Tests */}
+                                  <td>
+                                    {(plan.tests || []).length > 0 ? (
+                                      plan.tests.map((test, i) => (
+                                        <div key={i}>{test.test_name}</div>
+                                      ))
+                                    ) : (
+                                      <span>No Tests</span>
+                                    )}
+                                  </td>
+
+                                  {/* Dispense Medication */}
+                                  <td>
+                                    {(plan.medications || []).map(
+                                      (drug, index) => (
+                                        console.log("checking drug", drug),
+                                        (
+                                          <button
+                                            key={index}
+                                            className="btn btn-sm btn-outline-success mb-1"
+                                            disabled={
+                                              drug.dispense_status ===
+                                              "dispensed"
+                                            }
+                                            onClick={() =>
+                                              handleDispense(
+                                                plan._id,
+                                                loggedInUser,
+                                                index
+                                              )
+                                            }
+                                          >
+                                            {drug.dispense_status ===
+                                            "dispensed"
+                                              ? "Dispensed"
+                                              : "Dispense"}
+                                          </button>
+                                        )
+                                      )
+                                    )}
+                                  </td>
+
+                                  {/* Date */}
+                                  <td>
+                                    {new Date(
+                                      plan.createdAt
+                                    ).toLocaleDateString()}
+                                  </td>
+
+                                  {/* Doctor */}
+                                  <td>{plan.username || "N/A"}</td>
+
+                                  {/* Overall Status */}
+                                  <td>
+                                    <span
+                                      className={`badge ${
+                                        plan.status === "dispatched"
+                                          ? "badge-success"
+                                          : "badge-warning"
+                                      }`}
+                                    >
+                                      {plan.status}
+                                    </span>
+                                  </td>
+
+                                  {/* Actions */}
+                                  <td>
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={() => viewDetails(plan)}
+                                    >
+                                      View
+                                    </button>
+                                    <button
+                                      className="btn btn-sm btn-outline-success"
+                           
+                                      onClick={() =>
+                                        savePrescriptionInfo({
+                                          patient: plan.patient,
+                                          amount : plan.medications.amount,
+                                          registration_date:
+                                          plan.registration_date,
+                                          dispense_by: loggedInUser,
+                                          username : plan.username,
+                                        
+                                        })
+                                      }
+                                      disabled={saving || saved} 
+                                    >
+                                      <i className="fa fa-check"></i> 
+                                      
+                                      {saving ? "Saving..." : saved ? "Saved" : "Save"}
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan="9" className="text-center">
+                                  No pending data available
+                                </td>
+                              </tr>
+                            )}
                           </tbody>
                         </table>
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                 </main>
               </div>
             </div>

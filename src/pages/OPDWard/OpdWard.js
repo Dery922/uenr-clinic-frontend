@@ -11,7 +11,8 @@ const Opdward = () => {
   const [OPDQuery, setOPDQuery] = useState("");
   const [OPDresult, setOPDResult] = useState([]);
   const [selectedopdQuery, setSelectedOPDQuery] = useState(null);
-  const [tril, setTril] = useState([]);
+   
+  console.log(selectedopdQuery)
 
   const autUser = useSelector((state) => state.user.user);
 
@@ -19,7 +20,7 @@ const Opdward = () => {
     if (query.trim()) {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/patients/search?q=${query}`
+          `http://localhost:8080/api/display/open-sessions?q=${query}`
         );
         setResults(res.data);
       } catch (err) {
@@ -29,6 +30,7 @@ const Opdward = () => {
       setResults([]);
     }
   };
+  
 
   useEffect(() => {
     const delay = setTimeout(() => handleSearch(OPDQuery, setOPDResult), 500);
@@ -36,7 +38,7 @@ const Opdward = () => {
   }, [OPDQuery]);
 
   const vitalsVailidation = Yup.object({
-    registration_date: Yup.string().required("Date is required"),
+    registration_date: Yup.date().required("Date is required"),
     temperature: Yup.number().required("temperature is required"),
     pulse: Yup.number().required("Pulse is required"),
     respiratory_rate: Yup.number().required("Respiratory Rate is required"),
@@ -46,7 +48,6 @@ const Opdward = () => {
   });
 
   const handleSubmitVitals = async (values) => {
-    console.log(values);
     try {
       const record = await axios.post(
         "http://localhost:8080/create-patient-opdward-record",
@@ -135,6 +136,7 @@ const Opdward = () => {
                 {selectedopdQuery && (
                   <Formik
                     initialValues={{
+                      session_id: selectedopdQuery._id,
                       patient_id: selectedopdQuery.patient_id,
                       patient_name:
                         selectedopdQuery.first_name +

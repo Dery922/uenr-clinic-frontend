@@ -4,13 +4,20 @@ import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import React, { useEffect, useState } from "react";
+import socket from "../services/socketService";
+import { io } from "socket.io-client";
+
+
+
+const sockets = io("http://localhost:8080");
+
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-
-
+  const [notifications, setNotifications] = useState([]);
+  const doctorName = useSelector((state) => state.user.username);
   const logout = () => {
     Cookies.set("user", "");
     dispatch({
@@ -20,6 +27,25 @@ const Navbar = () => {
   };
   const user = useSelector((state) => state.user.user);
   const token = useSelector((state) => state.user.token);
+
+  console.log(notifications);
+
+  useEffect(() => {
+    if (!doctorName) return;
+  
+    socket.emit("joinDoctor", doctorName);
+
+    console.log(`Doctor room joined: ${doctorName}, Socket ID: ${socket.id}`);
+  
+    socket.on("newNotification", (notification) => {
+      console.log("Notification received:", notification);
+      setNotifications((prev) => [notification, ...prev]);
+    });
+  
+    return () => {
+      socket.off("newNotification");
+    };
+  }, [doctorName]);
 
   return (
     <div className="header">
@@ -36,6 +62,60 @@ const Navbar = () => {
         <i className="fa fa-bars"></i>
       </a>
       <ul className="nav user-menu float-right">
+        <li class="nav-item dropdown d-none d-sm-block">
+          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            <i class="fa fa-bell-o"></i>{" "}
+            {notifications.length >= 1 ? (
+              <span class="badge badge-pill bg-danger float-right">3</span>
+            ) : (
+              ""
+            )}
+          </a>
+          <div class="dropdown-menu notifications">
+            <div class="topnav-dropdown-header">
+              <span>Notifications {notifications.length}</span>
+            </div>
+            <div class="drop-scroll">
+              <ul class="notification-list">
+                <li class="notification-message">
+                  <a href="activities.html">
+                    <div class="media">
+                      <span class="avatar">
+                        <img
+                          alt="John Doe"
+                          src="assets/img/user.jpg"
+                          class="img-fluid rounded-circle"
+                        />
+                      </span>
+                      <div class="media-body">
+                        <p class="noti-details">
+                          <div>
+                            <h3>Notifications</h3>
+                            {notifications.length === 0 ? (
+                              <p>No notifications</p>
+                            ) : (
+                              <ul>
+                                {notifications.map((n) => (
+                                  <li key={n._id}>{n.message}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </p>
+                        <p class="noti-time">
+                          <span class="notification-time">4 mins ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="topnav-dropdown-footer">
+              <a href="activities.html">View all Notifications</a>
+            </div>
+          </div>
+        </li>
         <li className="nav-item dropdown d-none d-sm-block">
           <a
             href="javascript:void(0);"
@@ -46,6 +126,7 @@ const Navbar = () => {
             <span className="badge badge-pill bg-danger float-right">8</span>
           </a>
         </li>
+
         <li className="nav-item dropdown has-arrow">
           <a
             href="#"
@@ -73,16 +154,13 @@ const Navbar = () => {
             <a className="dropdown-item" href="settings.html">
               Settings
             </a>
-            <Link
-              className="dropdown-item"
-             
-              onClick={() => logout()}
-            >
+            <Link className="dropdown-item" onClick={() => logout()}>
               Logout
             </Link>
           </div>
         </li>
       </ul>
+
       <div className="dropdown mobile-user-menu float-right">
         <a
           href="#"

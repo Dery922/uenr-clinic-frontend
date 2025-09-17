@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import * as Yup from "yup";
 import axios from "axios";
 
 const PatientLabTest = () => {
@@ -11,6 +12,8 @@ const PatientLabTest = () => {
   const [result, setResult] = useState([]);
   const authUser = useSelector((state) => state.user.user);
   const [test, setTest] = useState();
+
+  const currentSessionId = useSelector((state) => state.user.currentSessionId);
 
   const [activeTab, setActiveTab] = useState("blood");
   const [bloodQuery, setBloodQuery] = useState("");
@@ -33,7 +36,7 @@ const PatientLabTest = () => {
     if (query.trim()) {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/patients/search?q=${query}`
+          `http://localhost:8080/api/display/open-sessions?q=${query}`
         );
         setResults(res.data);
       } catch (err) {
@@ -93,12 +96,15 @@ const PatientLabTest = () => {
 
   const handleSubmitTest = async (values) => {
     try {
+      const valuesData = {
+        ...values,
+        currentSessionId: currentSessionId,
+      };
       const record = await axios.post(
         "http://localhost:8080/create-patient-laptest-record",
-        values
+        valuesData
       );
       toast.success("Patient Blood Test Save successfully");
-      console.log(values);
     } catch (error) {
       toast.error("Error in saving Test result");
       console.log(error.message);
@@ -150,6 +156,13 @@ const PatientLabTest = () => {
     }
   };
 
+  const BloodvalidationSchema = Yup.object({
+    date: Yup.date().required("Date is required"),
+    hemoglobin: Yup.string().required("Hemoglobin is required"),
+    wbc_count: Yup.string().required("WBC_Count is required"),
+    // blood_pressure: Yup.string().required("Blodd pressure is required"),
+  });
+
   return (
     <div class="main-wrapper">
       <Sidebar />
@@ -176,7 +189,7 @@ const PatientLabTest = () => {
                         data-toggle="tab"
                         href="#blood"
                       >
-                        <i class="fas fa-tint"></i> Blood Tests
+                        <i class="fa fa-tint"></i> Blood Tests
                       </a>
                     </li>
                     <li class="nav-item">
@@ -186,7 +199,7 @@ const PatientLabTest = () => {
                         data-toggle="tab"
                         href="#urine"
                       >
-                        <i class="fas fa-flask"></i> Urine Tests
+                        <i class="fa fa-flask"></i> Urine Tests
                       </a>
                     </li>
                     <li class="nav-item">
@@ -196,7 +209,7 @@ const PatientLabTest = () => {
                         data-toggle="tab"
                         href="#imaging"
                       >
-                        <i class="fas fa-x-ray"></i> Imaging
+                        <i class="fa fa-medkit"></i> Imaging
                       </a>
                     </li>
                     <li class="nav-item">
@@ -206,7 +219,7 @@ const PatientLabTest = () => {
                         data-toggle="tab"
                         href="#quick"
                       >
-                        <i class="fas fa-bolt"></i> Quick Tests
+                        <i class="fa fa-bolt"></i> Quick Tests
                       </a>
                     </li>
                   </ul>
@@ -259,6 +272,7 @@ const PatientLabTest = () => {
                         {selectedBloodPatient && (
                           <Formik
                             initialValues={{
+                              session: selectedBloodPatient._id,
                               patient_name:
                                 selectedBloodPatient.first_name +
                                 " " +
@@ -274,6 +288,7 @@ const PatientLabTest = () => {
                               username: authUser.username,
                             }}
                             enableReinitialize
+                            validationSchema={BloodvalidationSchema}
                             onSubmit={(values, { setSubmitting }) => {
                               setTest(values);
                               handleSubmitTest(values);
@@ -281,201 +296,229 @@ const PatientLabTest = () => {
                               setSubmitting(false);
                             }}
                           >
-                            <Form>
-                              <div className="card-body">
-                                {/* Hemoglobin Test */}
-                                <div className="test-card mb-4 p-3 border rounded">
-                                  <div class="row mb-4">
-                                    <div class="col-md-6">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span class="input-group-text">
-                                            <i class="fas fa-user"></i>
-                                          </span>
+                            {({ errors, touched, values }) => (
+                              <Form>
+                                <div className="card-body">
+                                  {/* Hemoglobin Test */}
+                                  <div className="test-card mb-4 p-3 border rounded">
+                                    <div class="row mb-4">
+                                      <div class="col-md-6">
+                                        <div class="input-group">
+                                          <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                              <i class="fas fa-user"></i>
+                                            </span>
+                                          </div>
+                                          <Field
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Patient ID"
+                                            readonly
+                                            name="patient_id"
+                                          />
+                                          {touched.date && errors.date && (
+                                            <div className="text-danger">
+                                              {" "}
+                                              {errors.date}
+                                            </div>
+                                          )}
                                         </div>
-                                        <Field
-                                          type="text"
-                                          class="form-control"
-                                          placeholder="Patient ID"
-                                          readonly
-                                          name="patient_id"
-                                        />
                                       </div>
-                                    </div>
 
-                                    <div class="col-md-6">
-                                      <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span class="input-group-text">
-                                            <i class="fas fa-id-card"></i>
-                                          </span>
+                                      <div class="col-md-6">
+                                        <div class="input-group">
+                                          <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                              <i class="fas fa-id-card"></i>
+                                            </span>
+                                          </div>
+                                          <Field
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Patient Name"
+                                            name="patient_name"
+                                            readonly
+                                          />
                                         </div>
-                                        <Field
-                                          type="text"
-                                          class="form-control"
-                                          placeholder="Patient Name"
-                                          name="patient_name"
-                                          readonly
-                                        />
                                       </div>
                                     </div>
-                                  </div>
 
-                                  <div className="row">
-                                    <div className="col-md-3 mb-2">
-                                      <label className="text-muted small">
-                                        Select Date
-                                      </label>
-                                      <div className="input-group">
-                                        <DatePickerField name="date" />
+                                    <div className="row">
+                                      <div className="col-md-3 mb-2">
+                                        <label className="text-muted small">
+                                          Select Date
+                                        </label>
+                                        <div className="input-group">
+                                          <DatePickerField name="date" />
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
 
-                                  <div className="d-flex align-items-center mb-2">
-                                    <h6 className="mb-0 font-weight-bold text-dark flex-grow-1">
-                                      Hemoglobin (Hb)
-                                    </h6>
-                                    <span className="badge badge-danger ml-2">
-                                      Low
-                                    </span>
-                                  </div>
+                                    <div className="d-flex align-items-center mb-2">
+                                      <h6 className="mb-0 font-weight-bold text-dark flex-grow-1">
+                                        Hemoglobin (Hb)
+                                      </h6>
+                                      <span className="badge badge-danger ml-2">
+                                        Low
+                                      </span>
+                                    </div>
 
-                                  <div className="row">
-                                    <div className="col-md-3 mb-2">
-                                      <label className="text-muted small">
-                                        Result
-                                      </label>
-                                      <div className="input-group">
+                                    <div className="row">
+                                      <div className="col-md-3 mb-2">
+                                        <label className="text-muted small">
+                                          Result
+                                        </label>
+                                        <div className="input-group">
+                                          <Field
+                                            type="number"
+                                            name="hemoglobin"
+                                            className="form-control"
+                                            step="0.1"
+                                            defaultValue="10.2"
+                                          />
+
+                                          <div className="input-group-append">
+                                            <span className="input-group-text">
+                                              g/dL
+                                            </span>
+                                          </div>
+                                        </div>
+                                        {touched.date && errors.hemoglobin && (
+                                          <div className="text-danger">
+                                            {" "}
+                                            {errors.hemoglobin}
+                                          </div>
+                                        )}
+                                      </div>
+
+                                      <div className="col-md-3 mb-2">
+                                        <label className="text-muted small">
+                                          Normal Range
+                                        </label>
+                                        <div className="bg-light p-2 rounded text-center">
+                                          12.0 - 16.0 g/dL
+                                        </div>
+                                      </div>
+
+                                      <div className="col-md-3 mb-2">
+                                        <label className="text-muted small">
+                                          Flag
+                                        </label>
                                         <Field
-                                          type="number"
-                                          name="hemoglobin"
+                                          as="select"
+                                          name="hemoglobin_flag"
                                           className="form-control"
-                                          step="0.1"
-                                          defaultValue="10.2"
-                                        />
-                                        <div className="input-group-append">
-                                          <span className="input-group-text">
-                                            g/dL
-                                          </span>
-                                        </div>
+                                        >
+                                          <option value="Normal">Normal</option>
+                                          <option value="Abnormal" selected>
+                                            Abnormal
+                                          </option>
+                                          <option value="Low">Low</option>
+                                        </Field>
                                       </div>
+                                      {touched.date &&
+                                        errors.hemoglobin_flag && (
+                                          <div className="text-danger">
+                                            {" "}
+                                            {errors.hemoglobin_flag}
+                                          </div>
+                                        )}
                                     </div>
 
-                                    <div className="col-md-3 mb-2">
+                                    <div className="mt-2">
                                       <label className="text-muted small">
-                                        Normal Range
-                                      </label>
-                                      <div className="bg-light p-2 rounded text-center">
-                                        12.0 - 16.0 g/dL
-                                      </div>
-                                    </div>
-
-                                    <div className="col-md-3 mb-2">
-                                      <label className="text-muted small">
-                                        Flag
+                                        Notes
                                       </label>
                                       <Field
-                                        as="select"
-                                        name="hemoglobin_flag"
+                                        type="text"
+                                        name="hemoglobin_notes"
                                         className="form-control"
-                                      >
-                                        <option value="Normal">Normal</option>
-                                        <option value="Abnormal" selected>
-                                          Abnormal
-                                        </option>
-                                        <option value="Low">Low</option>
-                                      </Field>
+                                        placeholder="Microcytic anemia..."
+                                      />
                                     </div>
                                   </div>
 
-                                  <div className="mt-2">
-                                    <label className="text-muted small">
-                                      Notes
-                                    </label>
-                                    <Field
-                                      type="text"
-                                      name="hemoglobin_notes"
-                                      className="form-control"
-                                      placeholder="Microcytic anemia..."
-                                    />
-                                  </div>
-                                </div>
+                                  {/* WBC Count Test */}
+                                  <div className="test-card p-3 border rounded">
+                                    <div className="d-flex align-items-center mb-2">
+                                      <h6 className="mb-0 font-weight-bold text-dark flex-grow-1">
+                                        WBC Count
+                                      </h6>
+                                      <span className="badge badge-warning ml-2">
+                                        High
+                                      </span>
+                                    </div>
 
-                                {/* WBC Count Test */}
-                                <div className="test-card p-3 border rounded">
-                                  <div className="d-flex align-items-center mb-2">
-                                    <h6 className="mb-0 font-weight-bold text-dark flex-grow-1">
-                                      WBC Count
-                                    </h6>
-                                    <span className="badge badge-warning ml-2">
-                                      High
-                                    </span>
-                                  </div>
+                                    <div className="row">
+                                      <div className="col-md-3 mb-2">
+                                        <label className="text-muted small">
+                                          Result
+                                        </label>
+                                        <div className="input-group">
+                                          <Field
+                                            type="number"
+                                            name="wbc_count"
+                                            className="form-control"
+                                            step="0.1"
+                                            defaultValue="15.0"
+                                          />
+                                          <div className="input-group-append">
+                                            <span className="input-group-text">
+                                              10³/μL
+                                            </span>
+                                          </div>
+                                        </div>
+                                        {touched.date && errors.wbc_count && (
+                                            <div className="text-danger">
+                                              {" "}
+                                              {errors.wbc_count}
+                                            </div>
+                                          )}
+                                      </div>
+                                    
 
-                                  <div className="row">
-                                    <div className="col-md-3 mb-2">
-                                      <label className="text-muted small">
-                                        Result
-                                      </label>
-                                      <div className="input-group">
-                                        <Field
-                                          type="number"
-                                          name="wbc_count"
-                                          className="form-control"
-                                          step="0.1"
-                                          defaultValue="15.0"
-                                        />
-                                        <div className="input-group-append">
-                                          <span className="input-group-text">
-                                            10³/μL
-                                          </span>
+                                      <div className="col-md-3 mb-2">
+                                        <label className="text-muted small">
+                                          Normal Range
+                                        </label>
+                                        <div className="bg-light p-2 rounded text-center">
+                                          4.0 - 11.0 10³/μL
                                         </div>
                                       </div>
-                                    </div>
 
-                                    <div className="col-md-3 mb-2">
-                                      <label className="text-muted small">
-                                        Normal Range
-                                      </label>
-                                      <div className="bg-light p-2 rounded text-center">
-                                        4.0 - 11.0 10³/μL
+                                      <div className="col-md-3 mb-2">
+                                        <label className="text-muted small">
+                                          Flag
+                                        </label>
+                                        <Field
+                                          as="select"
+                                          name="wbc_flag"
+                                          className="form-control"
+                                        >
+                                          <option value="Normal">Normal</option>
+                                          <option value="High" selected>
+                                            High
+                                          </option>
+                                          <option value="Low">Low</option>
+                                        </Field>
                                       </div>
                                     </div>
 
-                                    <div className="col-md-3 mb-2">
+                                    <div className="mt-2">
                                       <label className="text-muted small">
-                                        Flag
+                                        Notes
                                       </label>
                                       <Field
-                                        as="select"
-                                        name="wbc_flag"
+                                        type="text"
+                                        name="wbc_notes"
                                         className="form-control"
-                                      >
-                                        <option value="Normal">Normal</option>
-                                        <option value="High" selected>
-                                          High
-                                        </option>
-                                        <option value="Low">Low</option>
-                                      </Field>
+                                        placeholder="Possible infection..."
+                                      />
                                     </div>
                                   </div>
 
-                                  <div className="mt-2">
-                                    <label className="text-muted small">
-                                      Notes
-                                    </label>
-                                    <Field
-                                      type="text"
-                                      name="wbc_notes"
-                                      className="form-control"
-                                      placeholder="Possible infection..."
-                                    />
-                                  </div>
-                                </div>
-
-                                <div class="row mt-4">
-                                  {/* <div class="col-md-6">
+                                  <div class="row mt-4">
+                                    {/* <div class="col-md-6">
                                     <div class="form-group">
                                       <label>Overall Interpretation</label>
                                       <textarea
@@ -485,22 +528,23 @@ const PatientLabTest = () => {
                                       ></textarea>
                                     </div>
                                   </div> */}
-                                  <div class="col-md-6 text-right">
-                                    <button class="btn btn-outline-secondary mr-2">
-                                      <i class="fas fa-print"></i> Print
-                                      Requisition
-                                    </button>
-                                    <button
-                                      type="submit"
-                                      class="btn btn-success"
-                                    >
-                                      <i class="fas fa-save"></i> Save All
-                                      Results
-                                    </button>
+                                    <div class="col-md-6 text-right">
+                                      <button class="btn btn-outline-secondary mr-2">
+                                        <i class="fas fa-print"></i> Print
+                                        Requisition
+                                      </button>
+                                      <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                      >
+                                        <i class="fas fa-save"></i> Save All
+                                        Results
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </Form>
+                              </Form>
+                            )}
                           </Formik>
                         )}
                       </div>
@@ -541,6 +585,7 @@ const PatientLabTest = () => {
                       {selectedUrinePatient && (
                         <Formik
                           initialValues={{
+                            session : selectedUrinePatient._id,
                             patient_name:
                               selectedUrinePatient.first_name +
                               " " +
@@ -725,6 +770,7 @@ const PatientLabTest = () => {
                       {selectedPatientImaging && (
                         <Formik
                           initialValues={{
+                            session : selectedPatientImaging._id,
                             patient_name: `${selectedPatientImaging.first_name} ${selectedPatientImaging.last_name}`,
                             patient_id: selectedPatientImaging.patient_id,
                             registration_date: "",
@@ -736,92 +782,94 @@ const PatientLabTest = () => {
                           enableReinitialize
                           onSubmit={handleImagingUpload}
                         >
-
-                          {({setFieldValue}) => (
-
-                          <Form>
-                            <div class="form-group">
-                              <label>Patient ID</label>
-                              <Field
-                                type="text"
-                                class="form-control"
-                                name="patient_id"
-                                readOnly
-                              />
-                            </div>
-                            <div class="form-group">
-                              <label>Patient Name</label>
-                              <Field
-                                type="text"
-                                class="form-control"
-                                name="patient_name"
-                                readOnly
-                              />
-                            </div>
-                            <div className="form-group">
-                              <DatePickerField name="registration_date" />
-                            </div>
-                  
-                            <div class="form-group">
-                              <label>Imaging Type</label>
-                              <Field
-                                as="select"
-                                name="image_type"
-                                class="form-control"
-                              >
-                                <option value="Chest X-Ray">Chest X-Ray</option>
-                                <option value="Abdominal Ultrasound">
-                                  Abdominal Ultrasound
-                                </option>
-                                <option value="Pelvic Ultrasound">
-                                  Pelvic Ultrasound
-                                </option>
-                                <option value="ECG">ECG</option>
-                              </Field>
-                            </div>
-                            <div class="form-group">
-                              <label>Findings</label>
-                              <Field
-                                as="textarea"
-                                name="findings"
-                                class="form-control"
-                                rows="3"
-                                placeholder="Describe imaging findings..."
-                              ></Field>
-                            </div>
-                            <div className="form-group">
-                              <label>Upload Image</label>
-                              <div className="custom-file">
-                                <input
-                                  id="imagingUpload"
-                                  name="image"
-                                  type="file"
-                                  className="custom-file-input"
-                                  onChange={(event) => {
-                                    setFieldValue(
-                                      "image",
-                                      event.currentTarget.files[0]
-                                    );
-                                  }}
+                          {({ setFieldValue }) => (
+                            <Form>
+                              <div class="form-group">
+                                <label>Patient ID</label>
+                                <Field
+                                  type="text"
+                                  class="form-control"
+                                  name="patient_id"
+                                  readOnly
                                 />
-                                <label
-                                  className="custom-file-label"
-                                  htmlFor="imagingUpload"
-                                >
-                                  Choose DICOM/image file
-                                </label>
                               </div>
-                            </div>
+                              <div class="form-group">
+                                <label>Patient Name</label>
+                                <Field
+                                  type="text"
+                                  class="form-control"
+                                  name="patient_name"
+                                  readOnly
+                                />
+                              </div>
+                              <div className="form-group">
+                                <DatePickerField name="registration_date" />
+                              </div>
 
-                            <div class="col-md-6 text-right">
-                              <button class="btn btn-outline-secondary mr-2">
-                                <i class="fas fa-print"></i> Print Requisition
-                              </button>
-                              <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Save All Results
-                              </button>
-                            </div>
-                          </Form>
+                              <div class="form-group">
+                                <label>Imaging Type</label>
+                                <Field
+                                  as="select"
+                                  name="image_type"
+                                  class="form-control"
+                                >
+                                  <option value="Chest X-Ray">
+                                    Chest X-Ray
+                                  </option>
+                                  <option value="Abdominal Ultrasound">
+                                    Abdominal Ultrasound
+                                  </option>
+                                  <option value="Pelvic Ultrasound">
+                                    Pelvic Ultrasound
+                                  </option>
+                                  <option value="ECG">ECG</option>
+                                </Field>
+                              </div>
+                              <div class="form-group">
+                                <label>Findings</label>
+                                <Field
+                                  as="textarea"
+                                  name="findings"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Describe imaging findings..."
+                                ></Field>
+                              </div>
+                              <div className="form-group">
+                                <label>Upload Image</label>
+                                <div className="custom-file">
+                                  <input
+                                    id="imagingUpload"
+                                    name="image"
+                                    type="file"
+                                    className="custom-file-input"
+                                    onChange={(event) => {
+                                      setFieldValue(
+                                        "image",
+                                        event.currentTarget.files[0]
+                                      );
+                                    }}
+                                  />
+                                  <label
+                                    className="custom-file-label"
+                                    htmlFor="imagingUpload"
+                                  >
+                                    Choose DICOM/image file
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div class="col-md-6 text-right">
+                                <button class="btn btn-outline-secondary mr-2">
+                                  <i class="fas fa-print"></i>
+                                  Print Requisition
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                  <i class="fas fa-save"></i>
+                                  Save All Results
+                                </button>
+                              </div>
+                            </Form>
                           )}
                         </Formik>
                       )}

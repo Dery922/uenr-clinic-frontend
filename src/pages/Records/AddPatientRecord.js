@@ -34,6 +34,8 @@ const AddPatientRecord = () => {
   const create_by = useSelector((state) => state.user.user);
   const phoneExg = /^(?:\+233|0)[235][0-9]{8}$/;
 
+  const insuranceNumbers = [12345, 123456, 1234567];
+
   const patientValidation = Yup.object().shape({
     first_name: Yup.string()
       .required("First name is required")
@@ -59,16 +61,21 @@ const AddPatientRecord = () => {
       .matches(phoneExg, "Phone number is not valid")
       .required("Phone number is required"),
     insurance: Yup.string().required("Insurance field is required"),
-    // course_of_studies: Yup.string().when('patient_type', {
-    //   is: 'student',
-    //   then: Yup.string().required('Course of study is required'),
-    //   otherwise: Yup.string().notRequired()
-    // }),
-    // insurance_number: Yup.string().when('insurance', {
-    //   is: 'yes',
-    //   then: Yup.string().required('Insurance number is required'),
-    //   otherwise: Yup.string().notRequired()
-    // })
+
+    insurance_number: Yup.string().when('insurance', {
+      is: (val) => val === 'yes', // must be a function if you're comparing a value
+      then: (schema) =>
+        schema
+          .required('Insurance number is required')
+          .test(
+            'is-valid-insurance',
+            'Invalid insurance number',
+            (value) => !value || insuranceNumbers.includes(Number(value))
+          ),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    
+
   });
 
   const registerRecord = async (values) => {

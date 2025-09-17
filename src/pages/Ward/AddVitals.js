@@ -19,7 +19,7 @@ const WardVitals = () => {
     if (query.trim()) {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/patients/search?q=${query}`
+          `http://localhost:8080/api/display/open-sessions?q=${query}`
         );
         setResults(res.data);
       } catch (err) {
@@ -45,14 +45,14 @@ const WardVitals = () => {
     weight: Yup.number().required("Weight is required"),
   });
 
-  const handleSubmitVitals = async (values) => {
+  const handleSubmitWardVitals = async (values) => {
     console.log(values);
     try {
       const record = await axios.post(
         "http://localhost:8080/create-patient-ward-record",
         values
       );
-      toast.success("Patient vitals enter successfully");
+      toast.success("Ward vitals eneter successfully!");
     } catch (error) {
       toast.error("Error in entrying data try again later");
       console.log(error.message);
@@ -135,6 +135,7 @@ const WardVitals = () => {
                 {selectedopdQuery && (
                   <Formik
                     initialValues={{
+                      session: selectedopdQuery._id,
                       patient_id: selectedopdQuery.patient_id,
                       patient_name:
                         selectedopdQuery.first_name +
@@ -147,13 +148,14 @@ const WardVitals = () => {
                       blood_pressure: "",
                       height: "",
                       weight: "",
+                      note:"",
                       username: autUser.username || "",
                       status: 0,
                     }}
                     validationSchema={vitalsVailidation}
                     enableReinitialize
                     onSubmit={(values, { setSubmitting }) => {
-                      handleSubmitVitals(values);
+                      handleSubmitWardVitals(values);
                       setSubmitting(false);
                     }}
                   >
@@ -340,7 +342,7 @@ const WardVitals = () => {
                                         className="form-control text-center"
                                         placeholder="170"
                                       />
-                                 
+
                                       <div className="input-group-append">
                                         <span className="input-group-text">
                                           cm
@@ -371,7 +373,7 @@ const WardVitals = () => {
                                         placeholder="0"
                                         step="0.1"
                                       />
-                             
+
                                       <div className="input-group-append">
                                         <span className="input-group-text">
                                           kg
@@ -384,6 +386,39 @@ const WardVitals = () => {
                                         </div>
                                       )}
                                     </div>
+                                    {/* <div className="input-group">
+                                      <Field 
+                                        as="textarea"
+                                        className="form-control mb-2"
+                                        placeholder="Initial Notes"
+                                        name="notes"
+                                  
+                                      />
+                                    </div> */}
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <div className="col-md-6 mb-6">
+                                <div className="card h-100">
+                                  <div className="card-body text-center">
+                                    <h6 className="card-title text-primary">
+                                      Notes
+                                    </h6>
+                                    <div className="input-group">
+                                      <Field
+                                        as="textarea"
+                                        type="text"
+                                        name="note"
+                                        className="form-control text-center"
+                                        placeholder="Enter notes if there is any...."
+                                     
+                                      />
+
+                              
+                                    </div>
+                    
                                   </div>
                                 </div>
                               </div>

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const PatientVitalsView = () => {
-  const {patientId} = useParams()
+  const {patientId} = useParams();
   const handlePrint = () => {
     window.print();
   };
@@ -18,15 +18,14 @@ const PatientVitalsView = () => {
     const fetchPatient = async () => {
       try {
         const res = await axios.get(`http://localhost:8080/opd-session-view/${patientId}`);
-        // setPatient(res.plans[0]);
-        setPatient(res.data.plans[0])
-         console.log(res)
+        setPatient(res.data)
+
+         console.log("checking info", res.data)
         
       } catch (err) {
         console.error("Error fetching patient data", err);
       }
     };
-
     fetchPatient();
   }, [patientId]);
 
@@ -65,15 +64,15 @@ const PatientVitalsView = () => {
                   <div className="col-md-6">
                     <div className="media d-flex align-items-center">
                       <div className="mr-3">
-                        <img src="/assets/img/patients/patient1.jpg" alt="Patient" className="rounded-circle" width="100" />
+                        <img src="/img/user.jpg" alt="Patient" className="rounded-circle" width="100" />
                       </div>
                       <div className="media-body">
-                        <h5 className="mb-1">Name</h5>
+                        <h5 className="mb-1">{patient?.patient || "Not available"}</h5>
                         <p className="mb-0">
                           {/* <span className="text-muted">Patient ID:</span> {patient.patient_id}<br /> */}
-                          <span className="text-muted">Age:</span> 35 years<br />
-                          <span className="text-muted">Gender:</span> Male<br />
-                          <span className="text-muted">Blood Group:</span> O+<br />
+                          <span className="text-muted">Age:</span> {patient?.age || "Not available"}<br />
+                          <span className="text-muted">Gender:</span> {patient?.gender || "not available"}<br />
+                          <span className="text-muted">Blood Group:</span>{patient?.blood_group || "Not available"}<br />
                         </p>
                       </div>
                     </div>
@@ -83,7 +82,7 @@ const PatientVitalsView = () => {
                       <ul className="list-unstyled">
                         <li>
                           <span className="text-muted">Recorded By:</span> 
-                          <strong>Nurse {patient?.username }</strong>
+                          <strong>Nurse {patient?.username || "" }</strong>
                         </li>
                         <li>
                           <span className="text-muted">Recorded On:</span> 
@@ -116,7 +115,7 @@ const PatientVitalsView = () => {
                       <div className="col-6">
                         <div className="vital-item">
                           <h6>Blood Pressure</h6>
-                          <p>120/80 <small>mmHg</small></p>
+                          <p>{patient?.blood_pressure} <small>mmHg</small></p>
                         </div>
                       </div>
                       <div className="col-6">
@@ -225,8 +224,8 @@ const PatientVitalsView = () => {
               <div className="notes-info">
                 <p>Patient appears well with no acute distress. Vitals within normal limits. No complaints of pain or discomfort.</p>
                 <div className="signature mt-4">
-                  <p className="mb-1">Recorded by: <strong>Nurse {patient.username}</strong></p>
-                  <img src="/assets/img/signature.png" alt="Signature" width="150" className="img-fluid" />
+                  <p className="mb-1">Recorded by: <strong>Nurse {patient?.username || ""}</strong></p>
+                  <img src="/img/signature.png" alt="Signature" width="150" className="img-fluid" />
                 </div>
               </div>
             </div>

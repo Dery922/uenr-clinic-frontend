@@ -65,11 +65,7 @@ const AddEmployee = () => {
     role: Yup.string().required("Role is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(8, "Minimum 8 characters")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Must contain uppercase, lowercase, number and special character"
-      ),
+      .min(8, "Minimum 8 characters"),
     confirm_password: Yup.string()
       .required("Please confirm your password")
       .oneOf([Yup.ref("password"), null], "Passwords must match"),

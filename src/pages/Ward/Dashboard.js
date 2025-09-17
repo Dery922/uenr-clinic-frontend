@@ -99,6 +99,17 @@ const WardDashboard = () => {
                         <i className="fas fa-bed mr-1"></i> Ward Status
                       </a>
                     </li>
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
+                        id="wards-tab"
+                        data-toggle="tab"
+                        href="#vitals"
+                        role="tab"
+                      >
+                        <i className="fa fa-bed mr-1"></i> Check Patients Vitals
+                      </a>
+                    </li>
                   </ul>
 
                   <div className="tab-content" id="wardTabsContent">
@@ -489,6 +500,115 @@ const WardDashboard = () => {
                     </div>
 
                     <div className="tab-pane fade" id="wards" role="tabpanel">
+                      <div className="card mt-4">
+                        <div className="card-header">
+                          <h5 className="mb-0">
+                            <i className="fas fa-bed mr-2"></i>
+                            Ward Status Overview
+                          </h5>
+                        </div>
+                        <div className="card-body">
+                          <div className="table-responsive">
+                            <table className="table table-bordered">
+                              <thead className="thead-dark">
+                                <tr>
+                                  <th>Ward Name</th>
+                                  <th>Department</th>
+                                  <th>Total Beds</th>
+                                  <th>Occupied</th>
+                                  <th>Available</th>
+                                  <th>Occupancy Rate</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>General Ward</td>
+                                  <td>Medicine</td>
+                                  <td>12</td>
+                                  <td>9</td>
+                                  <td>3</td>
+                                  <td>
+                                    <div
+                                      className="progress"
+                                      style={{ height: "20px" }}
+                                    >
+                                      <div
+                                        className="progress-bar bg-success"
+                                        role="progressbar"
+                                        style={{ width: "75%" }}
+                                      >
+                                        75%
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span className="badge badge-success">
+                                      Normal
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Pediatric Ward</td>
+                                  <td>Pediatrics</td>
+                                  <td>8</td>
+                                  <td>4</td>
+                                  <td>4</td>
+                                  <td>
+                                    <div
+                                      className="progress"
+                                      style={{ height: "20px" }}
+                                    >
+                                      <div
+                                        className="progress-bar bg-warning"
+                                        role="progressbar"
+                                        style={{ width: "50%" }}
+                                      >
+                                        50%
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span className="badge badge-success">
+                                      Normal
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Surgical Ward</td>
+                                  <td>Surgery</td>
+                                  <td>10</td>
+                                  <td>9</td>
+                                  <td>1</td>
+                                  <td>
+                                    <div
+                                      className="progress"
+                                      style={{ height: "20px" }}
+                                    >
+                                      <div
+                                        className="progress-bar bg-danger"
+                                        role="progressbar"
+                                        style={{ width: "90%" }}
+                                      >
+                                        90%
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span className="badge badge-danger">
+                                      Full
+                                    </span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className="tab-pane fade" id="vitals" role="tabpanel">
                       <div className="card mt-4">
                         <div className="card-header">
                           <h5 className="mb-0">

@@ -1,0 +1,163 @@
+/* Enhanced Table Styles */
+.vitals-display .vital-item,
+.measurements-display .measure-item {
+  margin-bottom: 2px;
+}
+
+.vital-label,
+.measure-label {
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 0.85em;
+  margin-right: 4px;
+}
+
+.vital-value,
+.measure-value {
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.bp-status {
+  font-size: 0.85em;
+  padding: 0.5em 0.8em;
+}
+
+.thead-light th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table-avatar img {
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.9em;
+  }
+  
+  .vital-label,
+  .measure-label {
+    display: block;
+  }
+}
+
+
+.tab-header {
+  background: #2c6fbb;
+  color: white;
+  padding: 20px;
+}
+
+.tab-content-container {
+  padding: 25px;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-item {
+  background: #f8fafc;
+  border-left: 4px solid #2c6fbb;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.history-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.history-date {
+  color: #2c6fbb;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.history-date i {
+  margin-right: 8px;
+}
+
+.diagnosis-info {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  margin: 12px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.diagnosis-title {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.diagnosis-title i {
+  margin-right: 8px;
+  color: #2c6fbb;
+}
+
+.diagnosis-content {
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+.recorded-by {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.recorded-by i {
+  margin-right: 6px;
+}
+
+.no-history {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+.no-history i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #ced4da;
+}
+
+.no-history h4 {
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .container {
+      border-radius: 0;
+      box-shadow: none;
+  }
+  
+  .tab-content-container {
+      padding: 15px;
+  }
+  
+  .history-item {
+      padding: 15px;
+  }
+}

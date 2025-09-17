@@ -22,12 +22,10 @@ const Prescription = () => {
         const res = await axios.get(`http://localhost:8080/pharmacy/prescription/${patientId}`);
         setPatient(res.data.plans[0]);
         console.log(res, "getting data from backend");
-        
       } catch (err) {
         console.error("Error fetching patient data", err);
       }
     };
-
     fetchPatient();
   }, [patientId]);
 
@@ -61,10 +59,10 @@ const Prescription = () => {
                         <p>
                           <strong>Name:</strong> {patient?.patient_name || "N/A"} 
                         </p>
-                        <p>
-                          <strong>ID:</strong> {patient?.patient_id || "N/A"}
+                         <p>
+                          <strong>ID:</strong> {patient?.patient || "N/A"}
                           {console.log(patient , "trying to check")}
-                        </p>
+                         </p>
                         <p>
                           <strong>Age:</strong> {patient?.age || "N/A"}
                         </p>
@@ -114,6 +112,7 @@ const Prescription = () => {
                             name="diagnosis"
                             className="form-control"
                             rows="2"
+                            readOnly
                             placeholder="Enter diagnosis"
                           />
                         </div>
@@ -136,6 +135,7 @@ const Prescription = () => {
                                 </thead>
                                 <tbody>
                                   {values.medications.map((med, index) => (
+                                
                                     <tr key={index}>
                                       <td>
                                         <Field
@@ -218,6 +218,14 @@ const Prescription = () => {
                             rows="3"
                             placeholder="Any special instructions for the patient"
                           />
+                        </div>
+                        <div className="form-group mb-4">
+                           <label>Patient Education</label>
+                            <Field 
+                             name="patient_education"
+                             className="form-control"
+                             readOnly
+                             />
                         </div>
 
                         <div className="d-flex justify-content-between">

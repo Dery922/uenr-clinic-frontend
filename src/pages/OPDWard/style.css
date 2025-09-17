@@ -1,0 +1,72 @@
+
+
+.patient-info {
+  line-height: 1.2;
+}
+
+.vitals-container,
+.measurements-container {
+  display: grid;
+  gap: 2px;
+}
+
+.vital-item,
+.measurement-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.vital-label,
+.measurement-label {
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.vital-value,
+.measurement-value {
+  font-weight: 600;
+  color: #495057;
+}
+
+.nurse-info {
+  text-align: center;
+  line-height: 1.2;
+}
+
+.timestamp {
+  text-align: center;
+  line-height: 1.2;
+}
+
+.date {
+  font-weight: 500;
+}
+
+.time {
+  font-size: 0.85rem;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .vitals-container,
+  .measurements-container {
+    gap: 1px;
+  }
+  
+  .vital-item,
+  .measurement-item {
+    font-size: 0.8rem;
+  }
+}
+

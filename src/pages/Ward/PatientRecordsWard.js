@@ -16,15 +16,17 @@ import jszip from "jszip";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import Sidebar from "../../components/Sidebar";
-const OPDPatientsVitals = () => {
+import axios from "axios";
+const PatientRecordsWard = () => {
 
         const [allPatient, setAllPatient] = useState([]);
     
         useEffect(() => {
             const fetchData = async () => {
-                const data = await patientOPDService();
-                console.log(data)
-                setAllPatient(data);
+        
+                const data = await axios.get("http://localhost:8080/all-patient-record-ward");
+                console.log(data, "getting data from backend")
+                setAllPatient(data.data);
             }
     
             fetchData()
@@ -166,4 +168,4 @@ const OPDPatientsVitals = () => {
   );
 };
 
-export default OPDPatientsVitals;
+export default PatientRecordsWard;

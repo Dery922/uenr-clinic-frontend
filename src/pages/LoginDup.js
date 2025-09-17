@@ -12,13 +12,21 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { Form, Formik, useField, ErrorMessage, Field } from "formik";
 import { use, useState } from "react";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+const loginInfos = {
+  username: "",
+  password: "",
+};
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [login, setLogin] = useState(loginInfos);
+  const { username, password } = login;
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -29,34 +37,40 @@ const Login = () => {
     setPasswordVisibility((prev) => !prev);
   };
 
-  // const loginSubmit = async (values) => {
-  //   setLoading(true);
-  //   try {
-  //     const { data } = await axios.post("http://localhost:8080/login",
-  //       values
-  //     );
-  //     console.log("Login response:", data); // DEBUG
+  const loginSubmit = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post("http://localhost:8080/login", {
+        username,
+        password,
+      });
+      console.log("Login response:", data); // DEBUG
 
-  //     // Properly extract user and token if data is flat
-  //     const { token, ...user } = data;
+      // Properly extract user and token if data is flat
+      const { token, ...user } = data;
 
-  //     // Set in redux
-  //     dispatch({ type: "LOGIN", payload: { user, token } });
+      // Set in redux
+      dispatch({ type: "LOGIN", payload: { user, token } });
 
-  //     // Save in cookies
-  //     Cookies.set("user", JSON.stringify(user));
-  //     Cookies.set("token", token);
+      // Save in cookies
+      Cookies.set("user", JSON.stringify(user));
+      Cookies.set("token", token);
 
-  //     toast.success("Login successful!");
+      toast.success("Login successful!");
 
-  //     navigate("/");
-  //   } catch (error) {
-  //     setError(error.response?.data?.message || "Login failed");
-  //     toast.error("Login failed, check your credentials and try again");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      navigate("/");
+    } catch (error) {
+      setError(error.response?.data?.message || "Login failed");
+      toast.error("Login failed, check your credentials and try again");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLoginChange = (e) => {
+    const { name, value } = e.target;
+    setLogin({ ...login, [name]: value });
+  };
 
   const loginValidation = Yup.object().shape({
     username: Yup.string()
@@ -81,35 +95,10 @@ const Login = () => {
               <div className="account-box">
                 <Formik
                   enableReinitialize
-                  initialValues={{ username: "", password: "" }}
+                  initialValues={{ email: "", password: "" }}
                   validationSchema={loginValidation}
-                  onSubmit={async (values) => {
-                    // values = { username, password }
-                    setLoading(true);
-                    try {
-                      const { data } = await axios.post(
-                        "http://localhost:8080/login",
-                        values
-                      );
-                      console.log("Login response:", data);
-
-                      const { token, ...user } = data;
-
-                      dispatch({ type: "LOGIN", payload: { user, token } });
-
-                      Cookies.set("user", JSON.stringify(user));
-                      Cookies.set("token", token);
-
-                      toast.success("Login successful!");
-                      navigate("/");
-                    } catch (error) {
-                      setError(error.response?.data?.message || "Login failed");
-                      toast.error(
-                        "Login failed, check your credentials and try again"
-                      );
-                    } finally {
-                      setLoading(false);
-                    }
+                  onSubmit={() => {
+                    loginSubmit();
                   }}
                 >
                   {({ errors, touched }) => (
@@ -124,14 +113,13 @@ const Login = () => {
                           name="username"
                           autoFocus
                           className="form-control"
+                          
                         />
-                        <div
-                          className=""
-                          style={{ minHeight: "20px", marginTop: "4px" }}
-                        >
-                          {touched.username && errors.username && (
-                            <div className="text-danger">{errors.username}</div>
-                          )}
+                        <div className="" style={{ minHeight: "20px", marginTop: "4px" }}>
+
+                        {touched.username && errors.username && (
+                          <div className="text-danger">{errors.username}</div>
+                        )}
                         </div>
                       </div>
                       <div
@@ -144,7 +132,7 @@ const Login = () => {
                           name="password"
                           className="form-control"
                           style={{
-                            paddingRight: "40px",
+                            paddingRight: "40px", 
                           }}
                         />
                         <span
@@ -161,9 +149,10 @@ const Login = () => {
                           {passwordVisibility ? <FaEyeSlash /> : <FaEye />}
                         </span>
                         <div style={{ minHeight: "20px", marginTop: "4px" }}>
-                          {touched.password && errors.password && (
-                            <div className="text-danger">{errors.password}</div>
-                          )}
+
+                        {touched.password && errors.password && (
+                          <div className="text-danger">{errors.password}</div>
+                        )}
                         </div>
                       </div>
 

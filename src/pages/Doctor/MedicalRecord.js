@@ -9,37 +9,36 @@ const MedicalRecord = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState(null);;
-  const authToken = useSelector(state => state.user.token);
-  console.log(authToken)
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const authToken = useSelector((state) => state.user.token);
 
   const handleRequestError = (error) => {
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          setError('Session expired. Please login again.');
+          setError("Session expired. Please login again.");
           break;
         case 404:
-          setError('No medical records found for this patient');
+          setError("No medical records found for this patient");
           break;
         default:
-          setError('Failed to fetch medical records');
+          setError("Failed to fetch medical records");
       }
     } else if (error.request) {
-      setError('Network error. Please check your connection.');
+      setError("Network error. Please check your connection.");
     } else {
-      setError('An unexpected error occurred');
+      setError("An unexpected error occurred");
     }
   };
 
   const handleSearch = async () => {
     if (!searchId.trim()) {
-      setError('Please enter a patient ID');
+      setError("Please enter a patient ID");
       return;
     }
 
     if (!authToken) {
-      setError('Authentication required');
+      setError("Authentication required");
       return;
     }
 
@@ -47,19 +46,19 @@ const MedicalRecord = () => {
     setError(null);
 
     try {
-      const cleanPatientId = searchId.replace(/^:/, '').trim();
-      
+      const cleanPatientId = searchId.replace(/^:/, "").trim();
+
       const response = await axios.get(
         `http://localhost:8080/api/patients/${cleanPatientId}/medical-records`,
         {
           headers: {
-            'Authorization': `Bearer ${authToken}`
-          }
+            Authorization: `Bearer ${authToken}`,
+          },
         }
       );
 
       setPatientRecords(response.data || []);
-      
+      console.log(response.data, "response data here");
     } catch (err) {
       handleRequestError(err);
     } finally {
@@ -67,82 +66,6 @@ const MedicalRecord = () => {
     }
   };
 
-
-  // const handleSearch = async () => {
-  //   if (!searchId.trim()) {
-  //     setError("Please enter a valid patient ID");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8080/api/patients/${searchId}/medical-records`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${authToken}`, //not storing token in localStorage
-  //         },
-  //         timeout: 10000, // 10 second timeout
-  //       }
-  //     );
-
-  //     if (response.data && response.data.length > 0) {
-  //       setPatientRecords(response.data);
-  //       console.log(response);
-  //     } else {
-  //       setError("No medical records found for this patient");
-  //       setPatientRecords([]);
-  //     }
-  //   } catch (err) {
-  //     console.error("Error fetching records:", err);
-  //     setError(
-  //       err.response?.data?.error ||
-  //         err.message ||
-  //         "Failed to fetch medical records"
-  //     );
-  //     setPatientRecords([]);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-    // Export handler function
-    // const handleExport = async () => {
-    //   if (!searchId.trim()) {
-    //     setError("Please search for a patient first");
-    //     return;
-    //   }
-  
-    //   try {
-    //     const response = await axios.get(
-    //       `http://localhost:8080/api/patients/${searchId}/medical-records/export`,
-    //       { 
-    //         responseType: 'blob',
-    //         headers: {
-    //           'Authorization': `Bearer ${authToken}`
-    //         }
-    //       }
-    //     );
-        
-    //     const url = window.URL.createObjectURL(new Blob([response.data]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', `medical-records-${searchId}.pdf`);
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     link.remove();
-    //   } catch (err) {
-    //     setError("Failed to export records: " + (err.message || "Unknown error"));
-    //   }
-    // };
-  
-    // View full record handler
-    // const viewFullRecord = (record) => {
-    //   setSelectedRecord(record);
-    //   setShowDetails(true);
-    // };
 
   return (
     <div className="main-wrapper">
@@ -238,21 +161,70 @@ const MedicalRecord = () => {
                   </li>
                 </ul>
                 <div className="tab-content" id="recordTabsContent">
-                  {/* Medical History */}
-                  <div
-                    className="tab-pane fade show active"
-                    id="history"
-                    role="tabpanel"
-                  >
-                    <h6>Chronic Conditions</h6>
-                    <ul>
-                      <li>Diabetes (diagnosed 2021)</li>
-                      <li>Hypertension</li>
-                    </ul>
-                    <h6>Allergies</h6>
-                    <p>Penicillin, Dust</p>
-                    <h6>Family History</h6>
-                    <p>Mother - Heart Disease, Father - Type 2 Diabetes</p>
+                  <div className="tab-pane fade" id="history" role="tabpanel">
+                    {/* Medical History */}
+
+                    <div class="container">
+                      <div class="tab-header">
+                        <h2>
+                          <i class="fa fa-history me-2"></i>Medical History
+                        </h2>
+                      </div>
+                      <div class="tab-content-container">
+                        {patientRecords.history &&
+                        patientRecords.history.length > 0 ? (
+                          <ul class="history-list">
+                            {patientRecords.history.map((dt) => (
+                              <li class="history-item">
+                                <div class="history-date">
+                                  <i class="fa fa-calendar-alt"></i>
+
+                                  {new Date(dt.date).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      weekday: "long",
+                                      year: "numeric", // e.g. 2025
+                                      month: "long", // e.g. September
+                                      day: "numeric", // e.g. 5
+                                      hour: "2-digit", // e.g. 02
+                                      minute: "2-digit", // e.g. 23
+                                      hour12: true, // 12-hour clock (true) or 24-hour (false)
+                                    }
+                                  )}
+                                </div>
+
+                                <div class="diagnosis-info">
+                                  <div class="diagnosis-title">
+                                    <i class="fa fa-stethoscope"></i>
+                                    Working Diagnosis
+                                  </div>
+                                  <div class="diagnosis-content">
+                                    {dt.working_diagnosis}
+                                  </div>
+                                </div>
+
+                                <div class="diagnosis-info">
+                                  <div class="diagnosis-title">
+                                    <i class="fa fa-list-alt"></i>
+                                    Differential Diagnosis
+                                  </div>
+                                  <div class="diagnosis-content">
+                                    {dt.differential_diagnosis}
+                                  </div>
+                                </div>
+
+                                <div class="recorded-by">
+                                  <i class="fa fa-user-md"></i>
+                                  {dt.recorded_by}
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p>No history available for this patient.</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   {/* SOAP Notes */}
@@ -269,7 +241,8 @@ const MedicalRecord = () => {
                       </div>
                     ) : error ? (
                       <div className="alert alert-danger">{error}</div>
-                    ) : patientRecords.length === 0 ? (
+                    ) : !patientRecords.soapNotes ||
+                      patientRecords.soapNotes.length === 0 ? (
                       <div className="alert alert-info">No records found</div>
                     ) : (
                       <>
@@ -291,8 +264,9 @@ const MedicalRecord = () => {
                         </div>
 
                         {showDetails ? (
+                          // Accordion View
                           <div className="accordion" id="soapAccordion">
-                            {patientRecords.map((record, index) => (
+                            {patientRecords.soapNotes.map((record, index) => (
                               <div
                                 className="card"
                                 key={`${record.date}-${index}`}
@@ -308,7 +282,10 @@ const MedicalRecord = () => {
                                       data-toggle="collapse"
                                       data-target={`#collapse-${index}`}
                                     >
-                                      {record.date} - {record.doctor}
+                                      {new Date(
+                                        record.date
+                                      ).toLocaleDateString()}{" "}
+                                      - {record.doctor}
                                     </button>
                                   </h5>
                                 </div>
@@ -319,6 +296,7 @@ const MedicalRecord = () => {
                                 >
                                   <div className="card-body">
                                     <div className="row">
+                                      {/* Left Column */}
                                       <div className="col-md-6">
                                         <h6>Subjective</h6>
                                         <p>{record.subjective}</p>
@@ -326,40 +304,47 @@ const MedicalRecord = () => {
                                         <h6>Assessment</h6>
                                         <p>{record.assessment}</p>
                                       </div>
+
+                                      {/* Right Column */}
                                       <div className="col-md-6">
                                         <h6>Objective</h6>
                                         <ul className="list-unstyled">
                                           <li>
                                             <strong>Physical Exam:</strong>{" "}
-                                            {
-                                              record.objective
-                                                .physical_examination
-                                            }
+                                            {record.objective
+                                              ?.physical_examination || "N/A"}
                                           </li>
                                           <li>
                                             <strong>Cardiovascular:</strong>{" "}
-                                            {record.objective.cardiovascular}
+                                            {record.objective?.cardiovascular ||
+                                              "N/A"}
                                           </li>
                                           <li>
                                             <strong>HEENT:</strong>{" "}
-                                            {record.objective.heent}
+                                            {record.objective?.heent || "N/A"}
                                           </li>
                                           <li>
                                             <strong>Respiratory:</strong>{" "}
-                                            {record.objective.respiratory}
+                                            {record.objective?.respiratory ||
+                                              "N/A"}
                                           </li>
                                         </ul>
 
                                         <h6>Plan</h6>
-                                        <ul>
-                                          {record.plan.medications.map(
-                                            (med, i) => (
-                                              <li key={i}>
-                                                {med.name} - {med.dosage}
-                                              </li>
-                                            )
-                                          )}
-                                        </ul>
+                                        {record.plan?.medications?.length >
+                                        0 ? (
+                                          <ul>
+                                            {record.plan.medications.map(
+                                              (med, i) => (
+                                                <li key={i}>
+                                                  {med.name} - {med.dosage}
+                                                </li>
+                                              )
+                                            )}
+                                          </ul>
+                                        ) : (
+                                          <p>No plan recorded</p>
+                                        )}
                                       </div>
                                     </div>
                                   </div>
@@ -368,52 +353,52 @@ const MedicalRecord = () => {
                             ))}
                           </div>
                         ) : (
+                          // Table View
                           <div className="table-responsive">
                             <table className="table table-bordered table-hover">
                               <thead className="thead-light">
                                 <tr>
                                   <th>Date</th>
                                   <th>Doctor</th>
-                                  <th>Chief Complaint</th>
+                                  <th>Chief complaint</th>
                                   <th>Diagnosis</th>
                                   <th>Actions</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {patientRecords.map((record, index) => (
-                                  <tr key={index}>
-                                    <td>
-                                      {new Date(
-                                        record.date
-                                      ).toLocaleDateString()}
-                                    </td>
-                                    <td>{record.doctor}</td>
-                                    <td>
-                                      {record.subjective.length > 50
-                                        ? `${record.subjective.substring(
-                                            0,
-                                            50
-                                          )}...`
-                                        : record.subjective}
-                                    </td>
-                                    <td>
-                                      {record.assessment.length > 50
-                                        ? `${record.assessment.substring(
-                                            0,
-                                            50
-                                          )}...`
-                                        : record.assessment}
-                                    </td>
-                                    <td>
-                                      <button
-                                        className="btn btn-sm btn-outline-primary"
-                                        // onClick={() => viewFullRecord(record)}
-                                      >
-                                        View
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))}
+                                {patientRecords.soapNotes.map(
+                                  (record, index) => (
+                                    <tr key={index}>
+                                      <td>
+                                        {new Date(
+                                          record.date
+                                        ).toLocaleDateString()}
+                                      </td>
+                                      <td>{record.doctor}</td>
+                                      <td>
+                                        {record.subjective?.length > 50
+                                          ? `${record.subjective.substring(
+                                              0,
+                                              50
+                                            )}...`
+                                          : record.subjective || "NO Data"}
+                                      </td>
+                                      <td>
+                                        {record.assessment?.length > 50
+                                          ? `${record.assessment.substring(
+                                              0,
+                                              50
+                                            )}...`
+                                          : record.assessment}
+                                      </td>
+                                      <td>
+                                        <button className="btn btn-sm btn-outline-primary">
+                                          View
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
                               </tbody>
                             </table>
                           </div>
@@ -423,16 +408,63 @@ const MedicalRecord = () => {
                   </div>
 
                   {/* Lab Results */}
-                  <div className="tab-pane fade" id="lab" role="tabpanel">
-                    <ul className="list-group">
-                      <li className="list-group-item">
-                        <strong>2025-07-10:</strong> CBC - Normal
-                      </li>
-                      <li className="list-group-item">
-                        <strong>2025-06-15:</strong> Fasting Glucose - 120 mg/dL
-                      </li>
-                    </ul>
-                  </div>
+              {/* Lab Results */}
+<div className="tab-pane fade" id="lab" role="tabpanel">
+  <div className="mb-3">
+    <h5>Blood Test Records</h5>
+    <ul className="list-group">
+      {patientRecords?.bloodhistory?.length > 0 ? (
+        patientRecords.bloodhistory.map((test) => (
+          <li className="list-group-item" key={test.id}>
+            <strong>{new Date(test.date).toLocaleDateString()}:</strong>{" "}
+            Hemoglobin: {test.hemoglobin ?? "N/A"}, WBC Count:{" "}
+            {test.wbc_count ?? "N/A"}{" "}
+            <span className="ml-2">
+              {test.wbc_flag ? (
+                <span className="badge badge-danger">Abnormal</span>
+              ) : (
+                <span className="badge badge-success">Normal</span>
+              )}
+            </span>
+            <div className="small text-muted">
+              Notes: {test.hemoglobin_notes || "No notes"}
+            </div>
+          </li>
+        ))
+      ) : (
+        <li className="list-group-item">No Blood Test report for patient</li>
+      )}
+    </ul>
+  </div>
+
+  <div>
+    <h5>Urine Test Records</h5>
+    <ul className="list-group">
+      {patientRecords?.urinetest?.length > 0 ? (
+        patientRecords.urinetest.map((test) => (
+          <li className="list-group-item" key={test.id}>
+            <strong>{new Date(test.date).toLocaleDateString()}:</strong>{" "}
+            Appearance: {test.appearance ?? "N/A"}, Color:{" "}
+            {test.color ?? "N/A"}{" "}
+            <span className="ml-2">
+              {test.wbc_flag ? (
+                <span className="badge badge-danger">Abnormal</span>
+              ) : (
+                <span className="badge badge-success">Normal</span>
+              )}
+            </span>
+            <div className="small text-muted">
+              Notes: {test.hemoglobin_notes || "No notes"}
+            </div>
+          </li>
+        ))
+      ) : (
+        <li className="list-group-item">No Urine Test report for patient</li>
+      )}
+    </ul>
+  </div>
+</div>
+
 
                   {/* Prescriptions */}
                   <div
@@ -452,17 +484,31 @@ const MedicalRecord = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>2025-07-20</td>
-                            <td>Amoxicillin</td>
-                            <td>500mg</td>
-                            <td>3 times a day</td>
-                            <td>
-                              <span className="badge badge-warning">
-                                Active
-                              </span>
-                            </td>
-                          </tr>
+                          {patientRecords?.prescriptions?.length > 0 ? (
+                            patientRecords.prescriptions.map((dts) => 
+                            <tr>
+                              <td> {new Date(dts.date).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      weekday: "long",
+                                      year: "numeric", // e.g. 2025
+                                      month: "long", // e.g. September
+                                      day: "numeric", // e.g. 5
+                                      hour: "2-digit", // e.g. 02
+                                      minute: "2-digit", // e.g. 23
+                                      hour12: true, // 12-hour clock (true) or 24-hour (false)
+                                    }
+                                  )}</td>
+                              <td>{dts.medications.map((med) => med.name)}</td>
+                              <td>{dts.medications.map((med) => med.dose)}</td>
+                              <td>{dts.medications.map((med) => med.frequency)}</td>
+                              <td>{dts.medications.map((med) => med.status)}</td>
+                            </tr>
+                          )
+                          ) : (
+                            <p>No prescription available for this patient</p>
+                          )}
+
                           {/* More rows */}
                         </tbody>
                       </table>

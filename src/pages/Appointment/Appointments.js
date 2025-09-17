@@ -70,7 +70,7 @@ const Appointment = () => {
     });
     setShowEditModal(true);
   };
-
+ 
   return (
     <div className="main-wrapper">
       <Sidebar />
@@ -162,6 +162,83 @@ const Appointment = () => {
               </div>
             </div>
           </div>
+
+          <div className="row">
+          <div className="col-12 col-md-6 col-lg-8 col-xl-8">
+            <div
+              className="card"
+              style={{ position: "relative", minHeight: "200px" }}
+            >
+              <div className="card-header">
+                <h4 className="card-title d-inline-block">
+                  Upcoming Appointments
+                </h4>
+                <a
+                  href="appointments.html"
+                  className="btn btn-primary float-right"
+                >
+                  View all
+                </a>
+              </div>
+              <div className="card-body p-0">
+                <div className="table-responsive">
+                  <table className="table mb-0">
+                    <thead className="d-none">
+                      <tr>
+                        <th>Patient Name</th>
+                        <th>Doctor Name</th>
+                        <th>Timing</th>
+                        <th className="text-right">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+          
+                          <tr>
+                            <td style={{ minWidth: 200 }}>
+                              <a className="avatar" href="profile.html">
+                                B
+                              </a>
+                              <h2>
+                                <a href="profile.html">
+                                    HOPE
+                                  <span>Sunyani</span>
+                                </a>
+                              </h2>
+                            </td>
+                            <td>
+                              <h5 className="time-title p-0">
+                                Appointment With
+                              </h5>
+                              <p>doctor janes</p>
+                            </td>
+                            <td>
+                              <h5 className="time-title p-0">Timing</h5>
+                              <p>11:90</p>
+                            </td>
+                            <td className="text-right">
+                              <a
+                                href="appointments.html"
+                                className="btn btn-outline-primary take-btn"
+                              >
+                                Take up
+                              </a>
+                              <a
+                                href="/add/appointment"
+                                className="btn btn-outline-warning take-btn"
+                              >
+                                Reschedule
+                              </a>
+                            </td>
+                          </tr>
+  
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          
         </div>
 
         {/* Delete appointment modal (unchanged) */}

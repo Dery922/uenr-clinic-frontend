@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { DotLoader } from "react-spinners";
 import Sidebar from "../../components/Sidebar";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const PatientLabHistory = () => {
   const [labHistory, setLabHistory] = useState([]);
@@ -8,57 +10,112 @@ const PatientLabHistory = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("all");
-
+  const [data, setData] = useState([])
   // Mock data - in a real app, this would come from an API
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      const mockData = [
+
+  // useEffect(() => {
+  //   const fetchLab = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:8080/get-all-lab-test");
+  //       const backendData = response.data;
+  
+  //       // Map backend data to match frontend structure
+  //       const formattedData = backendData.map((d) => ({
+  //         id: d._id,
+  //         testName: "Hemoglobin Test", // Or another field if your backend provides test name
+  //         testDate: d.date,
+  //         orderedBy: d.patient_id, // Adjust if you have a doctor field
+  //         status: d.hemoglobin_flag === "Abnormal" ? "completed" : "pending",
+  //         results: {
+  //           hemoglobin: d.hemoglobin,
+  //           flag: d.hemoglobin_flag,
+  //         },
+  //         notes: d.notes || "",
+  //       }));
+  
+  //       setLabHistory(formattedData);
+  //       setFilteredHistory(formattedData);
+  //     } catch (err) {
+  //       console.error("Error fetching lab data:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  
+  //   fetchLab();
+  // }, []);
+  
+
+
+  const handleRequestError = (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          setError("Session expired. Please login again.");
+          break;
+        case 404:
+          setError("No medical records found for this patient");
+          break;
+        default:
+          setError("Failed to fetch medical records");
+      }
+    } else if (error.request) {
+      setError("Network error. Please check your connection.");
+    } else {
+      setError("An unexpected error occurred");
+    }
+  };
+
+
+  const [searchId, setSearchId] = useState("");
+  const [error, setError] = useState(null);
+  const authToken = useSelector((state) => state.user.token);
+  const [patientRecords, setPatientRecords] = useState([]);
+
+
+
+  const handleSearch = async () => {
+    if (!searchId.trim()) {
+      setError("Please enter a patient ID");
+      return;
+    }
+
+    if (!authToken) {
+      setError("Authentication required");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const cleanPatientId = searchId.replace(/^:/, "").trim();
+      console.log(cleanPatientId)
+
+      const response = await axios.get(
+        `http://localhost:8080/api/patients/${cleanPatientId}/get-all-lab-test`,
         {
-          id: 1,
-          testName: "Complete Blood Count",
-          testDate: "2023-05-15",
-          orderedBy: "Dr. Smith",
-          status: "completed",
-          results: {
-            hemoglobin: "14.2 g/dL",
-            hematocrit: "42%",
-            wbc: "6.5 x10³/μL",
-            platelets: "250 x10³/μL",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
           },
-          notes: "Results within normal range",
-        },
-        {
-          id: 2,
-          testName: "Lipid Panel",
-          testDate: "2023-03-10",
-          orderedBy: "Dr. Johnson",
-          status: "completed",
-          results: {
-            cholesterol: "180 mg/dL",
-            hdl: "55 mg/dL",
-            ldl: "110 mg/dL",
-            triglycerides: "120 mg/dL",
-          },
-          notes: "Slightly elevated LDL",
-        },
-        {
-          id: 3,
-          testName: "Thyroid Stimulating Hormone",
-          testDate: "2023-01-05",
-          orderedBy: "Dr. Williams",
-          status: "completed",
-          results: {
-            tsh: "2.5 mIU/L",
-          },
-          notes: "Normal thyroid function",
-        },
-      ];
-      setLabHistory(mockData);
-      setFilteredHistory(mockData);
+        }
+      );
+
+      setPatientRecords(response.data || []);
+      console.log(patientRecords, "lap history")
+
+    } catch (err) {
+      handleRequestError(err);
+    } finally {
       setLoading(false);
-    }, 1000);
-  }, []);
+    }
+  };
+
+
+
+
+
+
 
   // Filtering logic
   useEffect(() => {
@@ -103,13 +160,13 @@ const PatientLabHistory = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="account-loading">
-      <DotLoader color="blue" size={100} />
-     </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="account-loading">
+  //     <DotLoader color="blue" size={100} />
+  //    </div>
+  //   );
+  // }  
 
   return (
     <div className="main-wrapper">
@@ -127,20 +184,29 @@ const PatientLabHistory = () => {
               {/* Filters */}
               <div className="card mb-4">
                 <div className="card-body">
-                  {/* <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Search Tests</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search by test name or doctor..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                      </div>
+                  <div className="row">
+                  <div className="form-group">
+                  <label>Search by Patient ID</label>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter patient ID..."
+                      value={searchId}
+                      onChange={(e) => setSearchId(e.target.value)}
+                  
+                    />
+                    <div className="input-group-append">
+                      <button
+                        className="btn btn-primary"
+                        onClick={handleSearch}
+                      >
+                        Search
+                      </button>
                     </div>
-                    <div className="col-md-4">
+                  </div>
+                </div>
+                    {/* <div className="col-md-4">
                       <div className="form-group">
                         <label>Time Period</label>
                         <select
@@ -164,102 +230,107 @@ const PatientLabHistory = () => {
                       >
                         Reset
                       </button>
-                    </div>
-                  </div> */}
+                    </div> */}
+                  </div>
                 </div>
               </div>
 
-              {/* Results */}
-              {filteredHistory.length === 0 ? (
-                <div className="card text-center">
+          {/* Results */}
+{!patientRecords?.bloodhistory || patientRecords.bloodhistory.length === 0 ? (
+  <div className="card text-center">
+    <div className="card-body">
+      <h5>No lab tests found</h5>
+      <p>Try adjusting your search filters</p>
+    </div>
+  </div>
+) : (
+  <div id="labHistoryAccordion">
+    {patientRecords.bloodhistory.map((test) => (
+      <div className="card mb-3" key={test.id}>
+        <div className="card-header" id={`heading-${test.id}`}>
+          <h5 className="mb-0">
+            <button
+              className="btn btn-link collapsed"
+              data-toggle="collapse"
+              data-target={`#collapse-${test.id}`}
+              aria-expanded="false"
+              aria-controls={`collapse-${test.id}`}
+            >
+              <div className="row w-100">
+                <div className="col-md-5 text-left">
+                  <strong>Blood Test</strong> {/* fixed name */}
+                </div>
+                <div className="col-md-3">
+                  {new Date(test.date).toLocaleDateString()}
+                </div>
+                <div className="col-md-4">{test.recorded_by}</div>
+                <div className="col-md-2 text-right">
+                  {test.wbc_flag ? (
+                    <span className="badge badge-danger">Abnormal</span>
+                  ) : (
+                    <span className="badge badge-success">Normal</span>
+                  )}
+                </div>
+              </div>
+            </button>
+          </h5>
+        </div>
+
+        <div
+          id={`collapse-${test.id}`}
+          className="collapse"
+          aria-labelledby={`heading-${test.id}`}
+          data-parent="#labHistoryAccordion"
+        >
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-8">
+                <h5>Test Results</h5>
+                <table className="table table-striped table-bordered table-sm">
+                  <thead className="thead-dark">
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Hemoglobin</td>
+                      <td>{test.hemoglobin ?? "N/A"}</td>
+                    </tr>
+                    <tr>
+                      <td>WBC Count</td>
+                      <td>{test.wbc_count ?? "N/A"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="col-md-4">
+                <h5>Notes</h5>
+                <div className="card">
                   <div className="card-body">
-                    <h5>No lab tests found</h5>
-                    <p>Try adjusting your search filters</p>
+                    {test.hemoglobin_notes || "No additional notes provided."}
                   </div>
                 </div>
-              ) : (
-                <div id="labHistoryAccordion">
-                  {filteredHistory.map((test) => (
-                    <div className="card mb-3" key={test.id}>
-                      <div className="card-header" id={`heading-${test.id}`}>
-                        <h5 className="mb-0">
-                          <button
-                            className="btn btn-link collapsed"
-                            data-toggle="collapse"
-                            data-target={`#collapse-${test.id}`}
-                            aria-expanded="false"
-                            aria-controls={`collapse-${test.id}`}
-                          >
-                            <div className="row w-100">
-                              <div className="col-md-5 text-left">
-                                <strong>{test.testName}</strong>
-                              </div>
-                              <div className="col-md-3">
-                                {new Date(test.testDate).toLocaleDateString()}
-                              </div>
-                              <div className="col-md-2">{test.orderedBy}</div>
-                              <div className="col-md-2 text-right">
-                                {getStatusBadge(test.status)}
-                              </div>
-                            </div>
-                          </button>
-                        </h5>
-                      </div>
 
-                      <div
-                        id={`collapse-${test.id}`}
-                        className="collapse"
-                        aria-labelledby={`heading-${test.id}`}
-                        data-parent="#labHistoryAccordion"
-                      >
-                        <div className="card-body">
-                          <div className="row">
-                            <div className="col-md-8">
-                              <h5>Test Results</h5>
-                              <table className="table table-striped table-bordered table-sm">
-                                <thead className="thead-dark">
-                                  <tr>
-                                    <th>Parameter</th>
-                                    <th>Value</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {Object.entries(test.results).map(
-                                    ([key, value]) => (
-                                      <tr key={key}>
-                                        <td>{key}</td>
-                                        <td>{value}</td>
-                                      </tr>
-                                    )
-                                  )}
-                                </tbody>
-                              </table>
-                            </div>
-                            <div className="col-md-4">
-                              <h5>Notes</h5>
-                              <div className="card">
-                                <div className="card-body">
-                                  {test.notes ||
-                                    "No additional notes provided."}
-                                </div>
-                              </div>
-
-                              <div className="mt-3">
-                                <button className="btn btn-outline-primary mr-2 btn-sm">
-                                  Print Results
-                                </button>
-                                <button className="btn btn-outline-secondary btn-sm">
-                                  Download PDF
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                <div className="mt-3">
+                  <button className="btn btn-outline-primary mr-2 btn-sm">
+                    Print Results
+                  </button>
+                  <button className="btn btn-outline-secondary btn-sm">
+                    Download PDF
+                  </button>
                 </div>
-              )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
             </div>
           </div>
         </div>

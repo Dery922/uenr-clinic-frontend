@@ -49,6 +49,9 @@ import OPDSession from "./pages/Doctor/OPDSession";
 import PatientVitalsView from "./pages/Doctor/ViewVitals";
 import WardDashboard from "./pages/Ward/Dashboard";
 import WardVitals from "./pages/Ward/AddVitals";
+import PatientSession from "./pages/Records/PatientSession";
+import ActiveSessionsTemplate from "./pages/Records/ViewPatientSession";
+import PatientRecordsWard from "./pages/Ward/PatientRecordsWard";
 
 function App() {
   useSocketAuth();
@@ -158,7 +161,7 @@ function App() {
             path="/patient-add-ward-record"
             element={
               <ProtectedRoute allowedRoles={["Admin", "Nurse"]}>
-              <WardVitals />
+                <WardVitals />
               </ProtectedRoute>
             }
           />
@@ -203,6 +206,15 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["Admin", "Nurse"]}>
                 <AllPatientRecordOPD />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/all-patient-record-ward"
+            element={
+              <ProtectedRoute allowedRoles={["Admin", "Nurse"]}>
+                <PatientRecordsWard />
               </ProtectedRoute>
             }
           />
@@ -278,7 +290,14 @@ function App() {
 
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/add-employee" element={<AddEmployee />} />
-          <Route path="/employee" element={<Employee />} />
+          <Route
+            path="/employee"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <Employee />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/profile" element={<Profile />} />
           <Route path="/message-employee" element={<MessageEmployee />} />
 
@@ -300,11 +319,11 @@ function App() {
             }
           />
 
-            <Route
+          <Route
             path="/opd-session-view/:patientId"
             element={
-              <ProtectedRoute allowedRoles={["Admin","Doctor"]}>
-                <PatientVitalsView/>
+              <ProtectedRoute allowedRoles={["Admin", "Doctor"]}>
+                <PatientVitalsView />
               </ProtectedRoute>
             }
           />
@@ -314,6 +333,24 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["Admin", "Account"]}>
                 <Account />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/active-session"
+            element={
+              <ProtectedRoute allowedRoles={["Admin", "Record", "Nurse"]}>
+                <ActiveSessionsTemplate />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/get-patient-session-status"
+            element={
+              <ProtectedRoute allowedRoles={["Admin", "Account", "Record"]}>
+                <PatientSession />
               </ProtectedRoute>
             }
           />
