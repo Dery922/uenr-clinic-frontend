@@ -96,12 +96,20 @@ const Login = () => {
                       );
                       console.log("Login response:", data);
 
-                      const { token, ...user } = data;
+                      // const { token, ...user } = data;
 
-                      dispatch({ type: "LOGIN", payload: { user, token } });
+                      // dispatch({ type: "LOGIN", payload: { user, token } });
 
-                      Cookies.set("user", JSON.stringify(user));
-                      Cookies.set("token", token);
+                      // Cookies.set("user", JSON.stringify(user));
+                      // Cookies.set("token", token);
+
+                      const { user, token } = data;
+
+dispatch({ type: "LOGIN", payload: { user, token } });
+
+Cookies.set("user", JSON.stringify(user), { sameSite: "None", secure: true });
+Cookies.set("token", token, { sameSite: "None", secure: true });
+
 
                       toast.success("Login successful!");
                       navigate("/");
