@@ -102,13 +102,13 @@ const Login = () => {
 
                       // Cookies.set("user", JSON.stringify(user));
                       // Cookies.set("token", token);
-
-                      const { user, token } = data;
+const { token, ...user } = data;
 
 dispatch({ type: "LOGIN", payload: { user, token } });
 
 Cookies.set("user", JSON.stringify(user), { sameSite: "None", secure: true });
 Cookies.set("token", token, { sameSite: "None", secure: true });
+
 
 
                       toast.success("Login successful!");
