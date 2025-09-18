@@ -8,6 +8,8 @@ import Login from "../pages/Login";
 
 export default function LoggedInRoutes() {
   const { user, token } = useSelector((state) => state.user);
+  console.log("Redux state user/token:", user, token);
+
 
   return user && token ? <Outlet /> : <Navigate to="/login" />;
 }
