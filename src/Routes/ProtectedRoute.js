@@ -3,24 +3,19 @@ import { Navigate } from "react-router-dom";
 
 
 
+const ProtectedRoute = ({ allowedRoles, children }) => {
+  const { user, token } = useSelector((state) => state.user);
 
+  if (!user || !token) {
+    return <Navigate to="/login" replace />;
+  }
 
-const ProtectedRoute = ({allowedRoles, children}) => {
-  const user = useSelector((state) => state.user.user);
-  console.log("🔑 Current user in Redux:", user);
-console.log("Role:", user?.role);
-    
-        if(!user ) {
-          return <Navigate to="/login" replace />
-        }
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
- if (!user || !allowedRoles.map(r => r.toLowerCase()).includes(user.role?.toLowerCase())) {
-  return <Navigate to="/unauthorized" />;
-}
+  return children;
+};
 
-   
-     return children;
-     
-}
 
 export default ProtectedRoute;
