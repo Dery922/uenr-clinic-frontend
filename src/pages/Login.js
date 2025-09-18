@@ -58,6 +58,8 @@ const Login = () => {
   //     setLoading(false);
   //   }
   // };
+  console.log("API Base URL:", API_BASE_URL);
+
 
   const loginValidation = Yup.object().shape({
     username: Yup.string()
