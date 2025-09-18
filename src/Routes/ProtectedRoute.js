@@ -5,6 +5,8 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ allowedRoles, children }) => {
   const { user, token } = useSelector((state) => state.user);
+  console.log("Redux state user/token:", user, token);
+
 
   if (!user || !token) {
     return <Navigate to="/login" replace />;
