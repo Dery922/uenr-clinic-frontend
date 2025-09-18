@@ -95,6 +95,8 @@ const Login = () => {
                         values
                       );
                       console.log("Login response:", data);
+                      console.log("Submitting login values:", values);
+
 
                       // const { token, ...user } = data;
 
