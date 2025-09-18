@@ -5,15 +5,13 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Patient from "./pages/PatientFolder/Patient";
-
 import Schedule from "./pages/Schedule";
-
 import AddDepartments from "./pages/AddDepartments";
 import AddAppointment from "./pages/Appointment/AddAppointment";
 import Notfound from "./pages/404";
 import LoggedInRoutes from "./Routes/LoggedInRoutes";
 import NotLoggedInRoutes from "./Routes/NotLoggedInRoutes";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddEmployee from "./pages/EmployeesFolder/AddEmployee";
 import Employee from "./pages/EmployeesFolder/Employee";
@@ -24,9 +22,7 @@ import MessageEmployee from "./pages/EmployeesFolder/MessageEmployee";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 import AddPatientRecord from "./pages/Records/AddPatientRecord";
 import OpdWard from "./pages/OPDWard/OpdWard";
-
 import Pharmacy from "./pages/Pharmacy/Phamacy";
-
 import useSocketAuth from "./chat/useSocketAuth";
 import AddPatientDoctorRecord from "./pages/Doctor/AddPatientDoctorRecord";
 import AllPatientRecord from "./pages/Records/AllPatientRecord";
@@ -57,28 +53,22 @@ function App() {
   useSocketAuth();
   const location = useLocation();
   const hideNavbarRoutes = ["/login", "/forgot-password"];
-  const chatsidebar = ["/message-employee"];
-
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (
     <>
       {!shouldHideNavbar && <Navbar />}
-
       <Routes>
-     <Route path="/add-employee" element={<AddEmployee />} />
+        <Route path="/add-employee" element={<AddEmployee />} />
         <Route element={<LoggedInRoutes />}>
           <Route
             path="/"
             element={
-              <ProtectedRoute
-                allowedRoles={["Admin", "Doctor", "Nurse", "Record"]}
-              >
+              <ProtectedRoute allowedRoles={["Admin", "Doctor", "Nurse", "Record"]}>
                 <HomePage />
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/add-patient-record"
             element={
@@ -87,7 +77,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/patient-history"
             element={
@@ -96,7 +85,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/inventory"
             element={
@@ -105,7 +93,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/doctor-schedule"
             element={
@@ -114,7 +101,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/all-patient-record"
             element={
@@ -139,7 +125,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/opd-session-today-view"
             element={
@@ -148,7 +133,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/patient-ward-dashboard"
             element={
@@ -157,7 +141,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/patient-add-ward-record"
             element={
@@ -166,7 +149,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/add-doctor-schedule"
             element={
@@ -175,7 +157,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/all-patient-lab-history"
             element={
@@ -184,7 +165,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/edit-patient-record/:id"
             element={
@@ -193,7 +173,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/add-patient-opdward"
             element={
@@ -210,7 +189,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/all-patient-record-ward"
             element={
@@ -219,8 +197,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/* Doctor routes here */}
           <Route
             path="/add-patient-doctor-record"
             element={
@@ -229,7 +205,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/appointment"
             element={
@@ -238,7 +213,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/add/appointment"
             element={
@@ -255,7 +229,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/patients"
             element={
@@ -288,9 +261,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route path="/schedule" element={<Schedule />} />
-         
           <Route
             path="/employee"
             element={
@@ -301,7 +272,6 @@ function App() {
           />
           <Route path="/profile" element={<Profile />} />
           <Route path="/message-employee" element={<MessageEmployee />} />
-
           <Route
             path="/pharmacy"
             element={
@@ -310,7 +280,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/pharmacy/prescription/:patientId"
             element={
@@ -319,7 +288,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/opd-session-view/:patientId"
             element={
@@ -328,7 +296,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/finance"
             element={
@@ -337,7 +304,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/active-session"
             element={
@@ -346,7 +312,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/get-patient-session-status"
             element={
@@ -355,7 +320,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin-page"
             element={
@@ -364,7 +328,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin-view-report"
             element={
@@ -373,19 +336,16 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
-            path="/admin-view-report"
+            path="/admin-generate-report"
             element={
               <ProtectedRoute allowedRoles={["Admin"]}>
                 <Reports />
               </ProtectedRoute>
             }
           />
-
           <Route path="*" element={<Notfound />} />
         </Route>
-
         <Route element={<NotLoggedInRoutes />}>
           <Route path="/forgot-password" element={<ForgottenPassword />} />
           <Route path="/login" element={<Login />} />
