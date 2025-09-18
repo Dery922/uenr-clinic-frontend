@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 
 let savedUser = null;
-let savedToken = null;
+// let savedToken = null;
 
 try {
   const rawUser = Cookies.get("user");
