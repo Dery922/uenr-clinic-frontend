@@ -66,7 +66,6 @@ const MedicalRecord = () => {
     }
   };
 
-
   return (
     <div className="main-wrapper">
       <Sidebar />
@@ -262,7 +261,6 @@ const MedicalRecord = () => {
                             Export to PDF
                           </button>
                         </div>
-
                         {showDetails ? (
                           // Accordion View
                           <div className="accordion" id="soapAccordion">
@@ -406,65 +404,79 @@ const MedicalRecord = () => {
                       </>
                     )}
                   </div>
-
                   {/* Lab Results */}
-              {/* Lab Results */}
-<div className="tab-pane fade" id="lab" role="tabpanel">
-  <div className="mb-3">
-    <h5>Blood Test Records</h5>
-    <ul className="list-group">
-      {patientRecords?.bloodhistory?.length > 0 ? (
-        patientRecords.bloodhistory.map((test) => (
-          <li className="list-group-item" key={test.id}>
-            <strong>{new Date(test.date).toLocaleDateString()}:</strong>{" "}
-            Hemoglobin: {test.hemoglobin ?? "N/A"}, WBC Count:{" "}
-            {test.wbc_count ?? "N/A"}{" "}
-            <span className="ml-2">
-              {test.wbc_flag ? (
-                <span className="badge badge-danger">Abnormal</span>
-              ) : (
-                <span className="badge badge-success">Normal</span>
-              )}
-            </span>
-            <div className="small text-muted">
-              Notes: {test.hemoglobin_notes || "No notes"}
-            </div>
-          </li>
-        ))
-      ) : (
-        <li className="list-group-item">No Blood Test report for patient</li>
-      )}
-    </ul>
-  </div>
+                  {/* Lab Results */}
+                  <div className="tab-pane fade" id="lab" role="tabpanel">
+                    <div className="mb-3">
+                      <h5>Blood Test Records</h5>
+                      <ul className="list-group">
+                        {patientRecords?.bloodhistory?.length > 0 ? (
+                          patientRecords.bloodhistory.map((test) => (
+                            <li className="list-group-item" key={test.id}>
+                              <strong>
+                                {new Date(test.date).toLocaleDateString()}:
+                              </strong>{" "}
+                              Hemoglobin: {test.hemoglobin ?? "N/A"}, WBC Count:{" "}
+                              {test.wbc_count ?? "N/A"}{" "}
+                              <span className="ml-2">
+                                {test.wbc_flag ? (
+                                  <span className="badge badge-danger">
+                                    Abnormal
+                                  </span>
+                                ) : (
+                                  <span className="badge badge-success">
+                                    Normal
+                                  </span>
+                                )}
+                              </span>
+                              <div className="small text-muted">
+                                Notes: {test.hemoglobin_notes || "No notes"}
+                              </div>
+                            </li>
+                          ))
+                        ) : (
+                          <li className="list-group-item">
+                            No Blood Test report for patient
+                          </li>
+                        )}
+                      </ul>
+                    </div>
 
-  <div>
-    <h5>Urine Test Records</h5>
-    <ul className="list-group">
-      {patientRecords?.urinetest?.length > 0 ? (
-        patientRecords.urinetest.map((test) => (
-          <li className="list-group-item" key={test.id}>
-            <strong>{new Date(test.date).toLocaleDateString()}:</strong>{" "}
-            Appearance: {test.appearance ?? "N/A"}, Color:{" "}
-            {test.color ?? "N/A"}{" "}
-            <span className="ml-2">
-              {test.wbc_flag ? (
-                <span className="badge badge-danger">Abnormal</span>
-              ) : (
-                <span className="badge badge-success">Normal</span>
-              )}
-            </span>
-            <div className="small text-muted">
-              Notes: {test.hemoglobin_notes || "No notes"}
-            </div>
-          </li>
-        ))
-      ) : (
-        <li className="list-group-item">No Urine Test report for patient</li>
-      )}
-    </ul>
-  </div>
-</div>
-
+                    <div>
+                      <h5>Urine Test Records</h5>
+                      <ul className="list-group">
+                        {patientRecords?.urinetest?.length > 0 ? (
+                          patientRecords.urinetest.map((test) => (
+                            <li className="list-group-item" key={test.id}>
+                              <strong>
+                                {new Date(test.date).toLocaleDateString()}:
+                              </strong>{" "}
+                              Appearance: {test.appearance ?? "N/A"}, Color:{" "}
+                              {test.color ?? "N/A"}{" "}
+                              <span className="ml-2">
+                                {test.wbc_flag ? (
+                                  <span className="badge badge-danger">
+                                    Abnormal
+                                  </span>
+                                ) : (
+                                  <span className="badge badge-success">
+                                    Normal
+                                  </span>
+                                )}
+                              </span>
+                              <div className="small text-muted">
+                                Notes: {test.hemoglobin_notes || "No notes"}
+                              </div>
+                            </li>
+                          ))
+                        ) : (
+                          <li className="list-group-item">
+                            No Urine Test report for patient
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
 
                   {/* Prescriptions */}
                   <div
@@ -485,9 +497,11 @@ const MedicalRecord = () => {
                         </thead>
                         <tbody>
                           {patientRecords?.prescriptions?.length > 0 ? (
-                            patientRecords.prescriptions.map((dts) => 
-                            <tr>
-                              <td> {new Date(dts.date).toLocaleDateString(
+                            patientRecords.prescriptions.map((dts) => (
+                              <tr>
+                                <td>
+                                  {" "}
+                                  {new Date(dts.date).toLocaleDateString(
                                     "en-US",
                                     {
                                       weekday: "long",
@@ -498,13 +512,22 @@ const MedicalRecord = () => {
                                       minute: "2-digit", // e.g. 23
                                       hour12: true, // 12-hour clock (true) or 24-hour (false)
                                     }
-                                  )}</td>
-                              <td>{dts.medications.map((med) => med.name)}</td>
-                              <td>{dts.medications.map((med) => med.dose)}</td>
-                              <td>{dts.medications.map((med) => med.frequency)}</td>
-                              <td>{dts.medications.map((med) => med.status)}</td>
-                            </tr>
-                          )
+                                  )}
+                                </td>
+                                <td>
+                                  {dts.medications.map((med) => med.name)}
+                                </td>
+                                <td>
+                                  {dts.medications.map((med) => med.dose)}
+                                </td>
+                                <td>
+                                  {dts.medications.map((med) => med.frequency)}
+                                </td>
+                                <td>
+                                  {dts.medications.map((med) => med.status)}
+                                </td>
+                              </tr>
+                            ))
                           ) : (
                             <p>No prescription available for this patient</p>
                           )}

@@ -28,12 +28,12 @@ const AddPatientDoctorRecord = () => {
   const [subjectiveResults, setSubjectiveResults] = useState([]);
   const [selectedPatientSubjective, setSelectedPatientSubjective] =
     useState(null);
-  console.log(subjectiveQuery);
+console.log(selectedPatientSubjective, "here is the subjective")
 
   const [planQuery, setPlanQuery] = useState("");
   const [planResults, setPlanResults] = useState([]);
   const [selectedPatientPlan, setSelectedPatientPlan] = useState(null);
-  console.log(selectedPatientPlan, "all plan data")
+
 
   {
     /* Inside your Plan Tab Component */

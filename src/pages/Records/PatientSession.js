@@ -5,7 +5,7 @@ import { EmployeeService } from "../../services/employeesService";
 import { useDispatch } from "react-redux";
 import { setSession } from "../../redux/actions/sessionAction";
 
-import Sidebar from "../../components/Sidebar"
+import Sidebar from "../../components/Sidebar";
 
 const PatientSession = () => {
   const [query, setQuery] = useState("");
@@ -15,12 +15,13 @@ const PatientSession = () => {
   const [result, setResult] = useState([]);
 
   const dispatch = useDispatch();
-
+  console.log(selectedPatient,'bjbj')
 
   useEffect(() => {
     console.log(doctors.role);
   }, []);
   const [form, setForm] = useState({
+     
     visitType: "",
     doctorId: "",
     notes: "",
@@ -45,7 +46,7 @@ const PatientSession = () => {
     // 👨‍⚕️ Load doctors (fetch once)
     const fetchDoctors = async () => {
       const data = await EmployeeService();
-      
+
       setDoctors(data.filter((d) => d.role === "Doctor"));
     };
     fetchDoctors();
@@ -56,19 +57,19 @@ const PatientSession = () => {
 
     const { data } = await axios.post("http://localhost:8080/create/session", {
       patientId: selectedPatient._id,
-      patient_id : selectedPatient.patient_id,
+      patient_id: selectedPatient.patient_id,
+      patient_name : selectedPatient.first_name + " " + selectedPatient.last_name,
       ...form,
     });
 
-       // Dispatch the sessionId to Redux
-     dispatch(setSession(data));
+    // Dispatch the sessionId to Redux
+    dispatch(setSession(data));
     toast.success("session created successfully!");
     console.log("Session:", data);
   };
 
   return (
     <div className="main-wrapper">
-        
       <div className="page-wrapper">
         <Sidebar />
         <div className="content">
@@ -86,7 +87,6 @@ const PatientSession = () => {
                       Patient Record System
                     </h1>
                   </div>
-
                   {/* Search Section */}
                   <div className="card mb-4">
                     <div className="card-header">
@@ -114,7 +114,7 @@ const PatientSession = () => {
                                   onClick={handleSearch}
                                   className="btn btn-primary"
                                 >
-                                  <i className="fas fa-search"></i> Search
+                                  <i className="fa fa-search"></i> Search
                                 </button>
                               </div>
                             </div>
@@ -140,7 +140,7 @@ const PatientSession = () => {
                   <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
                       <h5 className="mb-0">
-                        <i className="fas fa-users mr-2"></i>
+                        <i className="fa fa-users mr-2"></i>
                         Patient Results
                       </h5>
                       <span className="badge badge-primary">
@@ -158,7 +158,6 @@ const PatientSession = () => {
                               <th>Age</th>
                               <th>Last Visit</th>
                               <th>Actions</th>
-                 
                             </tr>
                           </thead>
 
@@ -195,7 +194,18 @@ const PatientSession = () => {
                     <div className="card mt-4">
                       <div className="card-body">
                         <h5>Create Session for {selectedPatient.first_name}</h5>
-            
+
+                    
+                          <label>Patient Name</label>
+                          <input
+                            type="text"
+                            className="form-control mb-2"
+                            value={selectedPatient.first_name + " " + selectedPatient.last_name}
+                            name="patient_name"
+                            readOnly
+                          />
+                     
+
                         <select
                           className="form-control mb-2"
                           value={form.visitType}
@@ -232,7 +242,6 @@ const PatientSession = () => {
                             setForm({ ...form, notes: e.target.value })
                           }
                         />
-
                         <button
                           className="btn btn-primary"
                           onClick={createSession}

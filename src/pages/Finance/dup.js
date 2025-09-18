@@ -2,33 +2,27 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
 
 const FinanceDepartment = () => {
   const [unpaidMedications, setUnpaidMedications] = useState([]);
   const [selectedBills, setSelectedBills] = useState([]);
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+  console.log(selectedBills, "select bills")
 
-  const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [transactionRef, setTransactionRef] = useState("");
+  console.log(unpaidMedications, "unpaid medications")
 
-  const userName = useSelector((state) => state.user.user);
-  console.log(userName, "username");
-
-  console.log(unpaidMedications, "unpaid medications");
 
   // Fetch unpaid medications
   const fetchUnpaidMedications = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/finance/unpaid-medications"
-      );
-
+      const response = await axios.get("http://localhost:8080/finance/unpaid-medications");
+     
       setUnpaidMedications(response.data);
-      console.log(response);
+      console.log(response)
+      
     } catch (error) {
-      toast.error(error.message || "Failed to load unpaid medications");
+      toast.error( error.message || "Failed to load unpaid medications");
     }
   };
 
@@ -42,55 +36,43 @@ const FinanceDepartment = () => {
       toast.error("Please select at least one bill to pay");
       return;
     }
-  
+
     try {
       setLoading(true);
-  
-      const payload = {
-        bills: selectedBills.map((bill) => ({
+      
+      for (const bill of selectedBills) {
+        await axios.post("http://localhost:8080/finance/process-payment", {
           planId: bill.planId,
           drugIndex: bill.drugIndex,
           amount_paid: bill.amount,
-        })),
-        total_amount: paymentAmount,
-        payment_method: paymentMethod,
-        transaction_id: transactionRef || `TXN-${Date.now()}`,
-        cashier_username: "finance_staff", // from auth later
-      };
-  
-      await axios.post("http://localhost:8080/finance/process-payment", payload);
-  
+          payment_method: "cash",
+          transaction_id: `TXN-${Date.now()}-${bill.drugIndex}`,
+          cashier_username: "finance_staff" // Would come from auth in real app
+        });
+      }
+
       toast.success("Payments processed successfully");
       setSelectedBills([]);
       setPaymentAmount(0);
-      setTransactionRef("");
       fetchUnpaidMedications();
+      
     } catch (error) {
-      toast.error(error.message || "Payment processing failed");
+      toast.error("Payment processing failed");
     } finally {
       setLoading(false);
     }
   };
-  
 
   // Handle bill selection
-  const handleBillSelection = (bill, isChecked) => {
-    setSelectedBills((prev) => {
-      let updated;
-      if (isChecked) {
-        updated = [...prev, bill];
-      } else {
-        updated = prev.filter(
-          (b) => !(b.planId === bill.planId && b.drugIndex === bill.drugIndex)
-        );
-      }
-
-      // update total
-      const total = updated.reduce((sum, b) => sum + (b.amount || 0), 0);
-      setPaymentAmount(total);
-
-      return updated;
-    });
+  const handleBillSelection = (bill, isSelected) => {
+    console.log(bill, isSelected, "LOGGing param from handleBillSelection")
+    if (isSelected) {
+      setSelectedBills(prev => [...prev, bill]);
+      setPaymentAmount(prev => prev + bill.amount);
+    } else {
+      setSelectedBills(prev => prev.filter(b => b.planId !== bill.planId || b.drugIndex !== bill.drugIndex));
+      setPaymentAmount(prev => prev - bill.amount);
+    }
   };
 
   return (
@@ -109,8 +91,8 @@ const FinanceDepartment = () => {
                       Finance Department - Medication Payments
                     </h1>
                     <div className="btn-toolbar mb-2 mb-md-0">
-                      <button
-                        type="button"
+                      <button 
+                        type="button" 
                         className="btn btn-sm btn-primary"
                         onClick={fetchUnpaidMedications}
                       >
@@ -127,24 +109,11 @@ const FinanceDepartment = () => {
                           <h6 className="card-title text-muted">
                             Total Pending Payments
                           </h6>
-
+                           
                           <h3 className="text-danger">
-                            <p>
-                              Total Pending Payments:{" "}
-                              <strong className="text-danger">
-                                ₵
-                                {unpaidMedications.reduce(
-                                  (sum, med) =>
-                                    sum +
-                                    med.medications.reduce(
-                                      (drugSum, drug) =>
-                                        drugSum + (drug.total_amount || 0),
-                                      0
-                                    ),
-                                  0
-                                )}
-                              </strong>
-                            </p>
+                            {console.log("total pending payments", unpaidMedications)}
+                            ₵{unpaidMedications.reduce((sum, med) => sum + med.amount, 0)} 
+                            {/* i just remove .toFixed(2) */}
                           </h3>
                         </div>
                       </div>
@@ -197,56 +166,72 @@ const FinanceDepartment = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {console.log(unpaidMedications)}
-                            {unpaidMedications.map((med, planIndex) =>
-                              med.medications.map((drug, drugIndex) => (
-                                <tr key={`${planIndex}-${drugIndex}`}>
-                                  {/* Checkbox */}
+                            {unpaidMedications.length > 0 ? (
+                              unpaidMedications.map((med, index) => (
+                                  
+                                <tr key={`${med.planId}-${med.drugIndex}`}>
+                      
                                   <td>
-                                    <input
-                                      type="checkbox"
-                                      onChange={(e) =>
-                                        handleBillSelection(
-                                          {
-                                            planId: med._id || planIndex, // plan/session ID
-                                            drugIndex: drugIndex, // track specific drug
-                                            amount: drug.amount || 0, // amount for this drug
-                                            medication_name:
-                                              drug.medication_name,
-                                            patient_name: med.patient_name,
-                                          },
-                                          e.target.checked
-                                        )
-                                      }
-                                    />
+                                    <div className="custom-control custom-checkbox">
+                                      <input
+                                        type="checkbox"
+                                        className="custom-control-input"
+                                        id={`bill-${index}`}
+                                        // onChange={(e) => handleBillSelection(med.medications.map((d,s) => (d.amount)), e.target.checked)}
+                                        onChange={(e) =>
+                                          handleBillSelection(
+                                            {
+                                              planId: med._id, // or session id
+                                              drugIndex: index,
+                                              amount: med.medications[0]?.total_amount || 0,
+                                              medication_name: med.medications[0]?.medication_name,
+                                              patient_name: med.patient_name,
+                                            },
+                                            e.target.checked
+                                          )
+                                        }
+                                        
+
+                                      />
+                                      <label
+                                        className="custom-control-label"
+                                        htmlFor={`bill-${index}`}
+                                      ></label>
+                                    </div>
                                   </td>
-
-                                  {/* Patient name */}
-                                  <td>{med.patient}</td>
-
-                                  {/* Medication name + frequency */}
                                   <td>
-                                    <strong>{drug.medication_name}</strong>
+                                    <div>
+                                      <strong>{med.patient_name}</strong>
+                                      <br />
+                                      <small className="text-muted">{med.patient}</small>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <strong>{med.medication_name}</strong>
                                     <br />
-                                    <small className="text-muted">
-                                      {drug.frequency || "N/A"}
-                                    </small>
+                                    <small className="text-muted">{med.frequency}</small>
                                   </td>
-
-                                  {/* Dose */}
-                                  <td>{drug.dose || "N/A"}</td>
-
-                                  {/* Amount */}
+                                  <td>{med.dose}</td>
                                   <td>
-                                    <strong className="text-danger">
-                                      ₵{drug.amount || 0}
-                                      {/* <strong className="text-danger">₵{med.medications.map((am,key) => (am.amount))}</strong> */}
-                                    </strong>
+                                    <strong className="text-danger">₵{med.medications.map((am,key) => (am.amount))}</strong>
                                   </td>
-                                  <td></td>
-                                  <td>{drug.registration_date}</td>
+                                  <td>
+                                    <span className="badge badge-warning">
+                                      {med.payment_status || "Pending Payment"}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    {new Date(med.registration_date).toLocaleDateString()}
+                                  </td>
                                 </tr>
                               ))
+                            ) : (
+                              <tr>
+                                <td colSpan="7" className="text-center py-4">
+                                  <i className="fa fa-check-circle fa-2x text-success mb-2"></i>
+                                  <p className="text-muted">No unpaid medication bills</p>
+                                </td>
+                              </tr>
                             )}
                           </tbody>
                         </table>
@@ -267,28 +252,16 @@ const FinanceDepartment = () => {
                         <div className="row">
                           <div className="col-md-6">
                             <h6 className="mb-3">Selected Bills</h6>
-                            <div
-                              className="border p-3"
-                              style={{ maxHeight: "200px", overflowY: "auto" }}
-                            >
+                            <div className="border p-3" style={{ maxHeight: "200px", overflowY: "auto" }}>
                               {selectedBills.map((bill, index) => (
-                                <div
-                                  key={index}
-                                  className="mb-2 p-2 border-bottom"
-                                >
-                                  {console.log(
-                                    selectedBills,
-                                    "here is the selected bill"
-                                  )}
+                                <div key={index} className="mb-2 p-2 border-bottom">
                                   <div className="d-flex justify-content-between align-items-center">
                                     <div>
                                       <strong>{bill.medication_name}</strong>
                                       <br />
                                       <small>{bill.patient_name}</small>
                                     </div>
-                                    <span className="text-danger">
-                                      ₵{bill.amount}
-                                    </span>
+                                    <span className="text-danger">₵{bill.amount}</span>
                                   </div>
                                 </div>
                               ))}
@@ -314,20 +287,10 @@ const FinanceDepartment = () => {
 
                             <div className="form-group">
                               <label>Payment Method</label>
-                              <select
-                                className="form-control"
-                                value={paymentMethod}
-                                onChange={(e) =>
-                                  setPaymentMethod(e.target.value)
-                                }
-                              >
+                              <select className="form-control">
                                 <option value="cash">Cash</option>
-                                <option value="mobile_money">
-                                  Mobile Money
-                                </option>
-                                <option value="bank_transfer">
-                                  Bank Transfer
-                                </option>
+                                <option value="mobile_money">Mobile Money</option>
+                                <option value="bank_transfer">Bank Transfer</option>
                                 <option value="card">Credit/Debit Card</option>
                               </select>
                             </div>
@@ -338,10 +301,6 @@ const FinanceDepartment = () => {
                                 type="text"
                                 className="form-control"
                                 placeholder="Enter transaction reference"
-                                value={transactionRef}
-                                onChange={(e) =>
-                                  setTransactionRef(e.target.value)
-                                }
                               />
                             </div>
 

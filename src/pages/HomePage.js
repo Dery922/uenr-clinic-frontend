@@ -4,11 +4,10 @@ import Sidebar from "../components/Sidebar"
 
 const HomePage = () => {
     return(
-       <>
-    
-        <Dashboard />
-        <Sidebar />
-        </>
+         <>
+         <Dashboard />
+         <Sidebar />
+         </>
     )
 }
 

@@ -15,6 +15,7 @@ import { use, useState } from "react";
 import { toast } from "react-toastify"; 
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import API_BASE_URL from "../config";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -88,7 +89,7 @@ const Login = () => {
                     setLoading(true);
                     try {
                       const { data } = await axios.post(
-                        "http://localhost:8080/login",
+                        `${API_BASE_URL}/login`,
                         values
                       );
                       console.log("Login response:", data);
