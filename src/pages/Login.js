@@ -102,12 +102,12 @@ const Login = () => {
 
                       // Cookies.set("user", JSON.stringify(user));
                       // Cookies.set("token", token);
-const { token, ...user } = data;
+                      const { user, token } = data;
 
-dispatch({ type: "LOGIN", payload: { user, token } });
+                     dispatch({ type: "LOGIN", payload: { user, token } });
 
-Cookies.set("user", JSON.stringify(user), { sameSite: "None", secure: true });
-Cookies.set("token", token, { sameSite: "None", secure: true });
+                     Cookies.set("user", JSON.stringify(user), { sameSite: "None", secure: true });
+                     Cookies.set("token", token, { sameSite: "None", secure: true });
 
 
 
