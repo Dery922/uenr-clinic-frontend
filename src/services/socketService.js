@@ -10,8 +10,8 @@ This part perform two functions
   or on() from anywhere in the app using this one socket.
 
 */
-const URL = 'http://localhost:8080';
-const socket = io(URL, {
+const socket = io(process.env.REACT_APP_API_URL || "http://localhost:8080",
+ {
  
   transports: ['websocket'],
 })
