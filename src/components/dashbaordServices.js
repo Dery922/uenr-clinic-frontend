@@ -23,7 +23,7 @@ const allPatientsService = async () => {
 }
 const allPatientsStudentService = async () => {
     try {
-        const response = await axios.get("http://localhost:8080/api/dashboard/all-patients-students");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-patients-students");
         return response.data
         console.log(response)
     } catch (error) {
@@ -33,7 +33,7 @@ const allPatientsStudentService = async () => {
 
 const allOutPatientsService = async () => {
     try {
-        const response = await axios.get("http://localhost:8080/api/dashboard/all-out-patients");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-out-patients");
         return response.data
         console.log(response)
     } catch (error) {
@@ -43,7 +43,7 @@ const allOutPatientsService = async () => {
 
 const barChartPatient = async () => {
     try {
-        const res = await axios.get("http://localhost:8080/api/patients/monthly-patient-stats");
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/patients/monthly-patient-stats");
           return res.data
 
       } catch (err) {
@@ -53,7 +53,7 @@ const barChartPatient = async () => {
 
 const genderPieChartService = async () => {
     try {
-        const res = await axios.get("http://localhost:8080/api/patients/gender-distribution");
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/patients/gender-distribution");
         const pieData = [
           { name: "Male", value: res.data.male },
           { name: "Female", value: res.data.female },

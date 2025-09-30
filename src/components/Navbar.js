@@ -10,10 +10,6 @@ import { io } from "socket.io-client";
 
 
 
-<<<<<<< HEAD
-// const sockets = io("http://localhost:8080");
-=======
->>>>>>> b89360a296e2e4f3149a886b8fc83e0f2768029b
 
 
 const Navbar = () => {
