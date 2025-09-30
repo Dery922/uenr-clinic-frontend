@@ -1,13 +1,14 @@
 import Cookies from "js-cookie";
 
 let savedUser = null;
+// let savedToken = null;
+
 try {
   const rawUser = Cookies.get("user");
-  if (rawUser) {
-    savedUser = JSON.parse(rawUser);
-  }
-} catch (error) {
-  console.error("Failed to parse user cookie:", error);
+  if (rawUser) savedUser = JSON.parse(rawUser);
+  savedToken = Cookies.get("token") || null;
+} catch (err) {
+  console.error("Failed to load cookies", err);
 }
 
 const savedToken = Cookies.get("token") || null;

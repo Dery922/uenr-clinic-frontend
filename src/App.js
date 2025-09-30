@@ -66,6 +66,7 @@ function App() {
       {!shouldHideNavbar && <Navbar />}
 
       <Routes>
+     <Route path="/add-employee" element={<AddEmployee />} />
         <Route element={<LoggedInRoutes />}>
           <Route
             path="/"
@@ -289,7 +290,7 @@ function App() {
           />
 
           <Route path="/schedule" element={<Schedule />} />
-          <Route path="/add-employee" element={<AddEmployee />} />
+         
           <Route
             path="/employee"
             element={

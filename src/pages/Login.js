@@ -58,6 +58,8 @@ const Login = () => {
   //     setLoading(false);
   //   }
   // };
+  console.log("API Base URL:", API_BASE_URL);
+
 
   const loginValidation = Yup.object().shape({
     username: Yup.string()
@@ -93,13 +95,23 @@ const Login = () => {
                         values
                       );
                       console.log("Login response:", data);
+                      console.log("Submitting login values:", values);
 
-                      const { token, ...user } = data;
 
-                      dispatch({ type: "LOGIN", payload: { user, token } });
+                      // const { token, ...user } = data;
 
-                      Cookies.set("user", JSON.stringify(user));
-                      Cookies.set("token", token);
+                      // dispatch({ type: "LOGIN", payload: { user, token } });
+
+                      // Cookies.set("user", JSON.stringify(user));
+                      // Cookies.set("token", token);
+                      const { user, token } = data;
+
+                     dispatch({ type: "LOGIN", payload: { user, token } });
+
+                     Cookies.set("user", JSON.stringify(user), { sameSite: "None", secure: true });
+                     Cookies.set("token", token, { sameSite: "None", secure: true });
+
+
 
                       toast.success("Login successful!");
                       navigate("/");

@@ -7,7 +7,9 @@ import Login from "../pages/Login";
 /** the Outlet allow you to access another elements inside another routes */
 
 export default function LoggedInRoutes() {
-    const navigate = useNavigate()
-    const user = useSelector((state) => state.user.user);
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  const { user, token } = useSelector((state) => state.user);
+  console.log("Redux state user/token:", user, token);
+
+
+  return user && token ? <Outlet /> : <Navigate to="/login" />;
 }
