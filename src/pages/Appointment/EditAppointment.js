@@ -52,14 +52,10 @@ const EditAppointment = () => {
   });
 
   const registerAppointment = async (values) => {
-    console.log(
-      "Network request to:",
-      "http://localhost:8080/create-appointment"
-    );
-    console.log(values);
+
     try {
       const appoint = await axios.post(
-        "http://localhost:8080/create-appointment",
+        `${process.env.REACT_APP_API_URL}` || "http://localhost:8080/create-appointment",
         values
       );
       toast.success("Appointment created successfully!!");

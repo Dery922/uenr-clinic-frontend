@@ -28,7 +28,7 @@ const ChatSidebar = ({ onSelectUser }) => {
     // ✅ 3. Fetch all users from backend
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/online-users");
+        const res = await fetch(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/online-users");
          
         const data = await res.json();
         setAllUsers(data);

@@ -21,7 +21,7 @@ const initialState = {
 };
 
 export function userReducer(state = initialState, action) {
-  console.log("Reducer called with action:", action);
+
 
   switch (action.type) {
     case "LOGIN":

@@ -49,7 +49,7 @@ const WardVitals = () => {
     console.log(values);
     try {
       const record = await axios.post(
-        "http://localhost:8080/create-patient-ward-record",
+        "http://localhost:8080/create-patient-ward-record"||`${process.env.REACT_APP_API_URL}`,
         values
       );
       toast.success("Ward vitals eneter successfully!");

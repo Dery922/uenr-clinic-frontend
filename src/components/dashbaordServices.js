@@ -3,7 +3,7 @@ import axios from "axios";
 const allUsersService = async () => {
     
         try {
-            const response = await axios.get("http://localhost:8080/api/dashboard/all-users");
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-users");
             return response.data;
             console.log(response)
         } catch (error) {
@@ -14,7 +14,7 @@ const allUsersService = async () => {
 
 const allPatientsService = async () => {
     try {
-        const response = await axios.get("http://localhost:8080/api/dashboard/all-patients");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-patients");
         return response.data
         console.log(response)
     } catch (error) {

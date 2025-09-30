@@ -32,7 +32,7 @@ const Appointment = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/delete-appointment/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}` || `http://localhost:8080/delete-appointment/${id}`);
       toast.warning("Appointment deleted successfully");
       setAppointments((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
@@ -45,7 +45,7 @@ const Appointment = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:8080/update-appointment/${editData._id}`,
+        `${process.env.REACT_APP_API_URL}` || `http://localhost:8080/update-appointment/${editData._id}`,
         editData
       );
       toast.info("Appointment updated successfully");

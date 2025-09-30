@@ -89,7 +89,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
     if (query.trim()) {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/display/open-sessions?q=${query}`
+          `http://localhost:8080/api/display/open-sessions?q=${query}`||`${process.env.REACT_APP_API_URL}` 
         );
         setResults(res.data);
         console.log(res.data);
@@ -136,7 +136,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
     const delayDebounce = setTimeout(() => {
       if (query.trim()) {
         axios
-          .get(`http://localhost:8080/api/patients/search?q=${query}`)
+          .get(`${process.env.REACT_APP_API_URL}` || `http://localhost:8080/api/patients/search?q=${query}`)
           .then((res) => setResult(res.data))
           .catch((err) => console.error(err));
       } else {
@@ -163,7 +163,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
 
   const handleSubmitObjective = async (values, { setSubmitting }) => {
     try {
-      await axios.post("http://localhost:8080/api/doctor-objective", values);
+      await axios.post(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/doctor-objective", values);
       toast.success("Objective saved successfully");
       setSubmitting(false);
     } catch (error) {
@@ -175,7 +175,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
 
   const handleSubmitAssessment = async (values, { setSubmitting }) => {
     try {
-      await axios.post("http://localhost:8080/api/doctor-assessment", values);
+      await axios.post(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/doctor-assessment", values);
       toast.success("Assessment saved successfully");
       setSubmitting(false);
     } catch (error) {
@@ -186,7 +186,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
   };
   const handleSubmitPlan = async (values, { setSubmitting, resetForm }) => {
     try {
-      await axios.post("http://localhost:8080/api/doctor-plan", values);
+      await axios.post(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/doctor-plan", values);
       toast.success("Plan saved successfully");
       resetForm(); // Optional: Clear the form after submission
     } catch (error) {
@@ -961,7 +961,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                               try {
                                                 const response =
                                                   await axios.get(
-                                                    `http://localhost:8080/api/inventory/search?query=${searchTerm}`
+                                                    `${process.env.REACT_APP_API_URL}` || `http://localhost:8080/api/inventory/search?query=${searchTerm}`
                                                   );
                                                 setMedicationResults(
                                                   response.data
@@ -993,7 +993,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                               try {
                                                 const response =
                                                   await axios.get(
-                                                    `http://localhost:8080/api/inventory/search?query=${medicationSearchTerm}&category=${category}`
+                                                    `${process.env.REACT_APP_API_URL}` || `http://localhost:8080/api/inventory/search?query=${medicationSearchTerm}&category=${category}`
                                                   );
                                                 setMedicationResults(
                                                   response.data

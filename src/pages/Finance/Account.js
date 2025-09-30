@@ -22,7 +22,7 @@ const FinanceDepartment = () => {
   const fetchUnpaidMedications = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/finance/unpaid-medications"
+        "http://localhost:8080/finance/unpaid-medications"||`${process.env.REACT_APP_API_URL}`
       );
 
       setUnpaidMedications(response.data);
@@ -58,7 +58,7 @@ const FinanceDepartment = () => {
         cashier_username: "finance_staff", // from auth later
       };
   
-      await axios.post("http://localhost:8080/finance/process-payment", payload);
+      await axios.post("http://localhost:8080/finance/process-payment"||`${process.env.REACT_APP_API_URL}`, payload);
   
       toast.success("Payments processed successfully");
       setSelectedBills([]);

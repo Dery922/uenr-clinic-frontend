@@ -16,7 +16,7 @@ const Inventory = () => {
   const handleSubmit = async (values) => {
     console.log("Submitting values:", values); // 👈 Add this
     try {
-      await axios.post("http://localhost:8080/api/add-inventory", {
+      await axios.post("http://localhost:8080/api/add-inventory"||`${process.env.REACT_APP_API_URL}`, {
         ...values,
 
         isCoveredByInsurance: values.isCoveredByInsurance === "Yes",

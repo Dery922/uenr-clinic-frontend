@@ -28,7 +28,7 @@ const Pharmacy = () => {
         
         setSaving(true)
         const res = await axios.post(
-          "http://localhost:8080/save-prescription-info",formData
+          "http://localhost:8080/save-prescription-info"||`${process.env.REACT_APP_API_URL}`,formData
           
         );
         toast.success("Data save successfully!");
@@ -46,7 +46,7 @@ const Pharmacy = () => {
       try {
         const res = await patientPrescription();
         const response = await axios.get(
-          "http://localhost:8080/pharmacy/pending/prescription"
+          "http://localhost:8080/pharmacy/pending/prescription"||`${process.env.REACT_APP_API_URL}`
         );
         setPendingData(response.data);
         console.log("dispense data coming", response.data);
@@ -66,7 +66,7 @@ const Pharmacy = () => {
       setSuccess(null);
 
       const response = await axios.patch(
-        `http://localhost:8080/pharmacy/dispense/${planId}`,
+        `http://localhost:8080/pharmacy/dispense/${planId}`||`${process.env.REACT_APP_API_URL}`,
         {
           pharmacist_username,
           drugIndex,

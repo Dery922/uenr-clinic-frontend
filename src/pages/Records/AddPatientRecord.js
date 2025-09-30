@@ -83,7 +83,7 @@ const AddPatientRecord = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/create-patient-record",
+        "http://localhost:8080/create-patient-record"||`${process.env.REACT_APP_API_URL}`,
         values
       );
       toast.success("Patient record created successfully!");

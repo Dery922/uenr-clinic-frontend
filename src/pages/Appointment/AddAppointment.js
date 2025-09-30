@@ -36,7 +36,7 @@ const AddAppointment = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/create-appointment",
+        `${process.env.REACT_APP_API_URL}` || "http://localhost:8080/create-appointment",
         values
       );
       toast.success("Appointment created successfully!");

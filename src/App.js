@@ -293,9 +293,10 @@ function App() {
           <Route
             path="/employee"
             element={
-              <ProtectedRoute allowedRoles={["Admin"]}>
+       
                 <Employee />
-              </ProtectedRoute>
+              //   <ProtectedRoute allowedRoles={["Admin"]}>
+              // </ProtectedRoute>
             }
           />
           <Route path="/profile" element={<Profile />} />
@@ -358,9 +359,10 @@ function App() {
           <Route
             path="/admin-page"
             element={
-              <ProtectedRoute allowedRoles={["Admin", "Account"]}>
+             
                 <Administrator />
-              </ProtectedRoute>
+              //   <ProtectedRoute allowedRoles={["Admin", "Account"]}>
+              // </ProtectedRoute>
             }
           />
 

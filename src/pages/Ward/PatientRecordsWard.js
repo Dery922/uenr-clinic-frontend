@@ -24,8 +24,7 @@ const PatientRecordsWard = () => {
         useEffect(() => {
             const fetchData = async () => {
         
-                const data = await axios.get("http://localhost:8080/all-patient-record-ward");
-                console.log(data, "getting data from backend")
+                const data = await axios.get("http://localhost:8080/all-patient-record-ward"||`${process.env.REACT_APP_API_URL}`);
                 setAllPatient(data.data);
             }
     

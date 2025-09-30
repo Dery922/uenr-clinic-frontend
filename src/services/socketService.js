@@ -8,12 +8,11 @@ This part perform two functions
   3. export this instance onces ensure we dont use multiple connection.
   4. Global control: we can connect(), disconnect(), emit(), 
   or on() from anywhere in the app using this one socket.
-
 */
-const URL = 'http://localhost:8080';
-const socket = io(URL, {
- 
-  transports: ['websocket'],
-})
+
+const socket = io( "http://localhost:8080" ||process.env.REACT_APP_API_URL , {
+  withCredentials: true,
+  transports: ["websocket"],
+});
 
 export default socket;
