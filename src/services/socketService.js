@@ -10,9 +10,10 @@ This part perform two functions
   or on() from anywhere in the app using this one socket.
 */
 
-const socket = io(process.env.REACT_APP_API_URL  ||"http://localhost:8080" , {
+const socket = io(process.env.REACT_APP_API_URL, {
   withCredentials: true,
   transports: ["websocket"],
+  autoConnect: false,
 });
 
 export default socket;

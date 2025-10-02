@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import appointmentService from "../../services/appointmentService";
 import axios from "axios";
 import { toast } from "react-toastify";
+import api from "../../services/api";
 
 const Appointment = () => {
   const [appointments, setAppointments] = useState([]);
@@ -32,7 +33,7 @@ const Appointment = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}` || `http://localhost:8080/delete-appointment/${id}`);
+      await api.delete( `/delete-appointment/${id}`);
       toast.warning("Appointment deleted successfully");
       setAppointments((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
@@ -44,8 +45,8 @@ const Appointment = () => {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}` || `http://localhost:8080/update-appointment/${editData._id}`,
+      await api.put(
+        `/update-appointment/${editData._id}`,
         editData
       );
       toast.info("Appointment updated successfully");

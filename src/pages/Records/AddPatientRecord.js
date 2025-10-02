@@ -26,6 +26,7 @@ import {
   FaCheckCircle,
   FaAddressCard,
 } from "react-icons/fa";
+import api from "../../services/api";
 
 const AddPatientRecord = () => {
   const [loading, setLoading] = useState(false);
@@ -79,11 +80,10 @@ const AddPatientRecord = () => {
   });
 
   const registerRecord = async (values) => {
-    console.log(values)
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:8080/create-patient-record"||`${process.env.REACT_APP_API_URL}`,
+      const response = await api.post(
+        "/create-patient-record",
         values
       );
       toast.success("Patient record created successfully!");

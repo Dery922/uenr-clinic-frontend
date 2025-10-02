@@ -100,10 +100,7 @@ const Pharmacy = () => {
             <div className="container-fluid pharmacy-page">
               <div className="row">
                 {/* Main Content */}
-                <main
-                  role="main"
-                  className="col-md-9 ml-sm-auto col-lg-10 px-4 main-content"
-                >
+  
                   <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 className="h2">Pharmacy Dashboard</h1>
                     <div className="btn-toolbar mb-2 mb-md-0">
@@ -307,7 +304,7 @@ const Pharmacy = () => {
                         <table className="table table-hover mb-0">
                           <thead className="thead-light">
                             <tr>
-                              <th>Patient Name</th>
+                              <th>Patient ID</th>
                               <th>Medications</th>
                               <th>Insurance Covered</th>
                               <th>Payment Status</th>
@@ -478,7 +475,7 @@ const Pharmacy = () => {
                       </div>
                     </div>
                   </div>
-                </main>
+               
               </div>
             </div>
           </div>

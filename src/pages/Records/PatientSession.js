@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setSession } from "../../redux/actions/sessionAction";
 
 import Sidebar from "../../components/Sidebar";
+import api from "../../services/api";
 
 const PatientSession = () => {
   const [query, setQuery] = useState("");
@@ -30,8 +31,8 @@ const PatientSession = () => {
   const handleSearch = async () => {
     if (query.trim()) {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/api/patients/search?q=${query}`
+        const res = await api.get(
+          `/api/patients/search?q=${query}`
         );
         setPatients(res.data);
       } catch (err) {
@@ -55,7 +56,7 @@ const PatientSession = () => {
   const createSession = async () => {
     if (!selectedPatient) return;
 
-    const { data } = await axios.post("http://localhost:8080/create/session", {
+    const { data } = await api.post("/create/session", {
       patientId: selectedPatient._id,
       patient_id: selectedPatient.patient_id,
       patient_name : selectedPatient.first_name + " " + selectedPatient.last_name,

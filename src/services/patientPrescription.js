@@ -1,12 +1,10 @@
 import axios from "axios";
+import api from "./api";
 
 const patientPrescription = async () => {
     try {
-        const resp = await axios.get("http://localhost:8080/api/all-patients-prescription"||`${process.env.REACT_APP_API_URL}`);
+        const resp = await api.get("/api/all-patients-prescription");
         return resp.data || []
-        // console.log(resp.plans)
-        // console.log(resp.assessment)
-        console.log(resp)
     } catch (error) {
         console.log(error)
     }

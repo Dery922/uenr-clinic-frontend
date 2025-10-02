@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import api from "../../services/api";
 
 const MedicalRecord = () => {
   const [searchId, setSearchId] = useState("");
@@ -48,8 +49,8 @@ const MedicalRecord = () => {
     try {
       const cleanPatientId = searchId.replace(/^:/, "").trim();
 
-      const response = await axios.get(
-        `http://localhost:8080/api/patients/${cleanPatientId}/medical-records`,
+      const response = await api.get(
+        `/api/patients/${cleanPatientId}/medical-records`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,

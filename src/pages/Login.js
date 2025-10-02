@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import API_BASE_URL from "../config";
+import api from "../services/api";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -58,7 +59,8 @@ const Login = () => {
   //     setLoading(false);
   //   }
   // };
-  console.log("API Base URL:", API_BASE_URL);
+
+
 
 
   const loginValidation = Yup.object().shape({
@@ -90,21 +92,16 @@ const Login = () => {
                     // values = { username, password }
                     setLoading(true);
                     try {
-                      const { data } = await axios.post(
-                        `${API_BASE_URL}/login`,
+                      const { data } = await api.post(
+                        "/login",
                         values
                       );
                       console.log("Login response:", data);
                       console.log("Submitting login values:", values);
 
 
-                      // const { token, ...user } = data;
-
-                      // dispatch({ type: "LOGIN", payload: { user, token } });
-
-                      // Cookies.set("user", JSON.stringify(user));
-                      // Cookies.set("token", token);
-                      const { user, token } = data;
+    
+                      const { token, ...user } = data;
 
                      dispatch({ type: "LOGIN", payload: { user, token } });
 

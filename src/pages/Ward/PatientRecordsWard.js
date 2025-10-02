@@ -17,6 +17,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import Sidebar from "../../components/Sidebar";
 import axios from "axios";
+import api from "../../services/api";
 const PatientRecordsWard = () => {
 
         const [allPatient, setAllPatient] = useState([]);
@@ -24,7 +25,7 @@ const PatientRecordsWard = () => {
         useEffect(() => {
             const fetchData = async () => {
         
-                const data = await axios.get("http://localhost:8080/all-patient-record-ward"||`${process.env.REACT_APP_API_URL}`);
+                const data = await api.get("/all-patient-record-ward");
                 setAllPatient(data.data);
             }
     

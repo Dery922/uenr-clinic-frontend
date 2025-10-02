@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import patientService from "../../services/patientService.js";
 import { EmployeeService } from "../../services/employeesService.js";
 import TimePickerField from "../../components/TImePickerField.js";
+import api from "../../services/api.js";
 
 const EditAppointment = () => {
   const [success, setSuccess] = useState();
@@ -54,8 +55,8 @@ const EditAppointment = () => {
   const registerAppointment = async (values) => {
 
     try {
-      const appoint = await axios.post(
-        `${process.env.REACT_APP_API_URL}` || "http://localhost:8080/create-appointment",
+      const appoint = await api.post(
+        "/create-appointment",
         values
       );
       toast.success("Appointment created successfully!!");

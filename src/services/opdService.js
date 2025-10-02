@@ -1,8 +1,9 @@
 import axios from "axios";
+import api from "./api";
 
 const patientOPDService = async () => {
     try {
-        const response = await axios.get("http://localhost:8080/api/getPatients/opd-records"||`${process.env.REACT_APP_API_URL}`);
+        const response = await api.get("/api/getPatients/opd-records");
         return response.data || []
     } catch (error) {
         console.log("Error fetching data...")

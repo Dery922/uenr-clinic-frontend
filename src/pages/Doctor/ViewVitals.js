@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react';
 import Sidebar from '../../components/Sidebar';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import api from '../../services/api';
 
 const PatientVitalsView = () => {
   const {patientId} = useParams();
@@ -17,7 +18,7 @@ const PatientVitalsView = () => {
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/opd-session-view/${patientId}`);
+        const res = await api.get(`/opd-session-view/${patientId}`);
         setPatient(res.data)
 
          console.log("checking info", res.data)

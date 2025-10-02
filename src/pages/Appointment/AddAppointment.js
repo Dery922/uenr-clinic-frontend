@@ -12,6 +12,7 @@ import TimePickerField from "../../components/TImePickerField.js";
 // import Loader from "../../components/Loader.js"; // New loading component
 import Loader from "../../components/FullScreenLoader.js"
 import "./style.css"
+import api from "../../services/api.js";
 
 const AddAppointment = () => {
   const [patients, setPatients] = useState([]);
@@ -35,8 +36,8 @@ const AddAppointment = () => {
   const registerAppointment = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}` || "http://localhost:8080/create-appointment",
+      const response = await api.post(
+        "/create-appointment",
         values
       );
       toast.success("Appointment created successfully!");

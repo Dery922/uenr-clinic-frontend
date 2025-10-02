@@ -1,11 +1,12 @@
-import axios from "axios";
+
+import api from "../services/api";
 
 const allUsersService = async () => {
     
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-users");
+            const response = await api.get("/api/dashboard/all-users");
             return response.data;
-            console.log(response)
+          
         } catch (error) {
             console.log(error)
         }
@@ -14,18 +15,18 @@ const allUsersService = async () => {
 
 const allPatientsService = async () => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-patients");
+        const response = await api.get( "/api/dashboard/all-patients");
         return response.data
-        console.log(response)
+
     } catch (error) {
         console.log(error)
     }
 }
 const allPatientsStudentService = async () => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-patients-students");
+        const response = await api.get( "/all-patients-students");
         return response.data
-        console.log(response)
+     
     } catch (error) {
         console.log(error)
     }
@@ -33,9 +34,9 @@ const allPatientsStudentService = async () => {
 
 const allOutPatientsService = async () => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/dashboard/all-out-patients");
+        const response = await api.get( "/api/dashboard/all-out-patients");
         return response.data
-        console.log(response)
+     
     } catch (error) {
         console.log(error)
     }
@@ -43,7 +44,7 @@ const allOutPatientsService = async () => {
 
 const barChartPatient = async () => {
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/patients/monthly-patient-stats");
+        const res = await api.get( "/api/patients/monthly-patient-stats");
           return res.data
 
       } catch (err) {
@@ -53,13 +54,13 @@ const barChartPatient = async () => {
 
 const genderPieChartService = async () => {
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/patients/gender-distribution");
+        const res = await api.get( "/api/patients/gender-distribution");
         const pieData = [
           { name: "Male", value: res.data.male },
           { name: "Female", value: res.data.female },
         ];
          return pieData;
-         console.log(pieData)
+        
       } catch (error) {
         console.error("Failed to fetch gender data", error);
       }

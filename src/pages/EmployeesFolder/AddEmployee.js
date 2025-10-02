@@ -5,6 +5,7 @@ import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import api from "../../services/api";
 
 const AddEmployee = () => {
   const [loading, setLoading] = useState(false);
@@ -112,7 +113,7 @@ const AddEmployee = () => {
     });
 
     try {
-      await axios.post("http://localhost:8080/createUser", formData, {
+      await api.post("/createUser", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

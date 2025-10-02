@@ -3,6 +3,7 @@ import Sidebar from "../../components/Sidebar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import api from "../../services/api";
 
 const FinanceDepartment = () => {
   const [unpaidMedications, setUnpaidMedications] = useState([]);
@@ -21,8 +22,8 @@ const FinanceDepartment = () => {
   // Fetch unpaid medications
   const fetchUnpaidMedications = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/finance/unpaid-medications"||`${process.env.REACT_APP_API_URL}`
+      const response = await api.get(
+        "/finance/unpaid-medications"
       );
 
       setUnpaidMedications(response.data);
@@ -58,7 +59,7 @@ const FinanceDepartment = () => {
         cashier_username: "finance_staff", // from auth later
       };
   
-      await axios.post("http://localhost:8080/finance/process-payment"||`${process.env.REACT_APP_API_URL}`, payload);
+      await api.post("/finance/process-payment", payload);
   
       toast.success("Payments processed successfully");
       setSelectedBills([]);

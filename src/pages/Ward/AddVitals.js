@@ -6,6 +6,7 @@ import { Formik, Form, Field } from "formik";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import api from "../../services/api";
 
 const WardVitals = () => {
   const [OPDQuery, setOPDQuery] = useState("");
@@ -18,8 +19,8 @@ const WardVitals = () => {
   const handleSearch = async (query, setResults) => {
     if (query.trim()) {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/api/display/open-sessions?q=${query}`
+        const res = await api.get(
+          `/api/display/open-sessions?q=${query}`
         );
         setResults(res.data);
       } catch (err) {
@@ -48,8 +49,8 @@ const WardVitals = () => {
   const handleSubmitWardVitals = async (values) => {
     console.log(values);
     try {
-      const record = await axios.post(
-        "http://localhost:8080/create-patient-ward-record"||`${process.env.REACT_APP_API_URL}`,
+      const record = await api.post(
+        "/create-patient-ward-record",
         values
       );
       toast.success("Ward vitals eneter successfully!");

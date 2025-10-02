@@ -1,9 +1,10 @@
 import axios from "axios"
+import api from "./api";
 
 const EmployeeService = async () => {
     
       try {
-        const getAllEmployees = await axios.get( "http://localhost:8080/api/getEmployees"||`${process.env.REACT_APP_API_URL}`);
+        const getAllEmployees = await api.get( "/api/getEmployees");
         return getAllEmployees.data
       } catch (error) {
         console.log(error)

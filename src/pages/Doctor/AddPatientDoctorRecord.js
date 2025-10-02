@@ -7,6 +7,7 @@ import DatePickerField from "../../components/DatePickerField";
 import { toast } from "react-toastify";
 import CreatableSelect from "react-select/creatable";
 import * as Yup from "yup";
+import api from "../../services/api";
 const AddPatientDoctorRecord = () => {
   const [medicationResults, setMedicationResults] = useState([]);
   const diagnosisOptions = [
@@ -88,8 +89,8 @@ console.log(selectedPatientSubjective, "here is the subjective")
   const handleSearch = async (query, setResults) => {
     if (query.trim()) {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/api/display/open-sessions?q=${query}`||`${process.env.REACT_APP_API_URL}` 
+        const res = await api.get(
+          `/api/display/open-sessions?q=${query}` 
         );
         setResults(res.data);
         console.log(res.data);
@@ -135,8 +136,8 @@ console.log(selectedPatientSubjective, "here is the subjective")
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (query.trim()) {
-        axios
-          .get(`${process.env.REACT_APP_API_URL}` || `http://localhost:8080/api/patients/search?q=${query}`)
+        api
+          .get(`/api/patients/search?q=${query}`)
           .then((res) => setResult(res.data))
           .catch((err) => console.error(err));
       } else {
@@ -149,7 +150,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
 
   const handleSubmitSubjective = async (values, { setSubmitting }) => {
     try {
-      await axios.post("http://localhost:8080/api/doctor-subjective", values);
+      await api.post("/api/doctor-subjective", values);
       console.log(values);
       toast.success("Subjective saved successfully");
       setSubmitting(false);
@@ -163,7 +164,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
 
   const handleSubmitObjective = async (values, { setSubmitting }) => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/doctor-objective", values);
+      await api.post("/api/doctor-objective", values);
       toast.success("Objective saved successfully");
       setSubmitting(false);
     } catch (error) {
@@ -175,7 +176,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
 
   const handleSubmitAssessment = async (values, { setSubmitting }) => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/doctor-assessment", values);
+      await api.post( "/api/doctor-assessment", values);
       toast.success("Assessment saved successfully");
       setSubmitting(false);
     } catch (error) {
@@ -186,7 +187,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
   };
   const handleSubmitPlan = async (values, { setSubmitting, resetForm }) => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}` || "http://localhost:8080/api/doctor-plan", values);
+      await api.post("/api/doctor-plan", values);
       toast.success("Plan saved successfully");
       resetForm(); // Optional: Clear the form after submission
     } catch (error) {
@@ -233,7 +234,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/all-inventory");
+        const res = await api.get("/api/all-inventory");
         setInventory(res.data);
       } catch (err) {
         console.error("Error fetching inventory:", err);
@@ -367,7 +368,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                   <div class="input-group">
                                     <div class="input-group-prepend">
                                       <span class="input-group-text">
-                                        <i class="fas fa-user"></i>
+                                        <i class="fa fa-user"></i>
                                       </span>
                                     </div>
                                     <Field
@@ -941,7 +942,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                 <div className="card mb-4">
                                   <div className="card-header">
                                     <h6 className="mb-0">
-                                      <i className="fas fa-search mr-2"></i>
+                                      <i className="fa fa-search mr-2"></i>
                                       Search Medication from Inventory
                                     </h6>
                                   </div>
@@ -1098,7 +1099,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                 <div className="card mb-4">
                                   <div className="card-header">
                                     <h6 className="mb-0">
-                                      <i className="fas fa-pills mr-2"></i>
+                                      <i className="fa fa-pills mr-2"></i>
                                       Prescribed Medications
                                     </h6>
                                   </div>
@@ -1211,7 +1212,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                                               : "warning"
                                                           } alert-sm mb-0 py-2`}
                                                         >
-                                                          <i className="fas fa-exclamation-triangle mr-2"></i>
+                                                          <i className="fa fa-exclamation-triangle mr-2"></i>
                                                           {med.quantity_available ===
                                                           0
                                                             ? "Out of stock! Please choose alternative medication"
@@ -1236,7 +1237,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                             }
                                             className="btn btn-sm btn-outline-secondary mt-2"
                                           >
-                                            <i className="fas fa-plus mr-1"></i>{" "}
+                                            <i className="fa fa-plus mr-1"></i>{" "}
                                             Add Custom Medication
                                           </button>
                                         </>
@@ -1249,7 +1250,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                 <div className="card mb-4">
                                   <div className="card-header">
                                     <h6 className="mb-0">
-                                      <i className="fas fa-flask mr-2"></i>
+                                      <i className="fa fa-flask mr-2"></i>
                                       Tests Ordered
                                     </h6>
                                   </div>
@@ -1302,7 +1303,7 @@ console.log(selectedPatientSubjective, "here is the subjective")
                                             }
                                             className="btn btn-sm btn-outline-secondary"
                                           >
-                                            <i className="fas fa-plus mr-1"></i>{" "}
+                                            <i className="fa fa-plus mr-1"></i>{" "}
                                             Add Test
                                           </button>
                                         </>
